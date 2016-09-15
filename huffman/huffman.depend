@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1473945718 source:e:\ufal\p2\projeto-p2\huffman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
