@@ -13,8 +13,8 @@ typedef struct tree{
     Tree_Node * root;
 }Tree;
 
-Tree_node * create_tree_node(){
-    Node * a = (Tree_Node*)malloc(sizeof(Tree_Node));
+Tree_Node * create_tree_node(){
+    Tree_Node * a = (Tree_Node*)malloc(sizeof(Tree_Node));
     a->left = NULL;
     a->right = NULL;
     a->priority = 0;
@@ -24,4 +24,12 @@ Tree * create_tree(){
     Tree *a = (Tree*)malloc(sizeof(Tree));
     a->root = NULL;
     return a;
+}
+
+void print_preorder_tree(Tree_Node * tree){
+    if(tree!=NULL){
+        printf ("%s:%d\n",tree->ch,tree->priority);
+        print_preorder_tree(tree->left);
+        print_preorder_tree(tree->right);
+    }
 }
