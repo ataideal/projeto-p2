@@ -1,0 +1,21 @@
+# depslib dependency file v1.0
+1474153176 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\main.c
+	<stdio.h>
+	<stdlib.h>
+	"priority_queue.h"
+	"priority_queue_heap.h"
+
+1474153445 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue.c
+	<stdio.h>
+	<stdlib.h>
+	"priority_queue.h"
+
+1473818919 c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue.h
+
+1474153102 c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.h
+
+1474153209 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.c
+	<stdio.h>
+	<stdlib.h>
+	"priority_queue_heap.h"
+

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "priority_queue.h"
 
 struct Node
 {
@@ -11,7 +12,6 @@ struct Node
 typedef struct Node Node;
 struct priorityQueue
 {
-    int trocas;
     Node *First;
 };
 typedef struct priorityQueue priorityQueue;
@@ -24,7 +24,6 @@ int isEmpty (priorityQueue *pq)
 priorityQueue *createPriorityQueue()
 {
     priorityQueue *newP = (priorityQueue*) malloc (sizeof(priorityQueue));
-    newP->trocas=0;
     newP->First=NULL;
     return newP;
 }
@@ -36,7 +35,7 @@ priorityQueue *enqueue (priorityQueue *pq, int elemento, int p)
     aux->element=elemento;
     aux->priority=p;
         if(isEmpty(pq) || p > pq->First->priority)
-        {  //printf ("aqui");
+        {
             aux->next=pq->First;
             pq->First = aux;
         }
@@ -50,7 +49,7 @@ priorityQueue *enqueue (priorityQueue *pq, int elemento, int p)
             }
             aux->next=current->next;
             current->next=aux;
-            pq->trocas++;
+
         }
         return pq; //Pois tem que atualizar a cabeça da fila mesmo que não tenha sido inserido em ultimo ou primeiro.
 }
@@ -78,7 +77,7 @@ void printQueue (priorityQueue *pq)
     aux=pq->First;
         while(aux!=NULL)
         {
-            printf("%d\n",aux->element);
+            printf("PriorityQueue - %d\n",aux->element);
             aux=aux->next;
         }
 
