@@ -40,13 +40,17 @@ int main(){
         p->priority = x1->priority + x2->priority;
         p->left = x1;
         p->right = x2;
-        sprintf(p->ch,"%s+%s",x1->ch,x2->ch);
+        sprintf(p->ch,"*",x1->ch,x2->ch);
         pq = enqueue_pq(pq,p);
     }
 
     Tree * tree = create_tree();
     tree->root = dequeue_pq(pq);
     print_preorder_tree(tree->root);
+    FILE *output_file;
+    output_file = fopen("output.txt", "wb+");
+    print_preorder_tree_in_file(tree->root,output_file);
+    fclose(output_file);
 
     return 0;
 }

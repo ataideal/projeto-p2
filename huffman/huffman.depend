@@ -28,3 +28,28 @@
 	<stdio.h>
 	<stdlib.h>
 
+1474140104 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"PriorityQueue.h"
+	"Tree.h"
+
+1474135290 c:\users\casa\repositories\projeto-p2\huffman\priorityqueue.h
+	<stdio.h>
+	<stdlib.h>
+	"Tree.h"
+
+1474139906 c:\users\casa\repositories\projeto-p2\huffman\tree.h
+	<stdio.h>
+	<stdlib.h>
+
+1474135290 source:c:\users\casa\repositories\projeto-p2\huffman\priorityqueue.c
+	<stdio.h>
+	<stdlib.h>
+	"Tree.h"
+
+1474139950 source:c:\users\casa\repositories\projeto-p2\huffman\tree.c
+	<stdio.h>
+	<stdlib.h>
+

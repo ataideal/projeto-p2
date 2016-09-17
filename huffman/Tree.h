@@ -18,6 +18,7 @@ typedef struct tree{
 Tree_Node * create_tree_node();
 Tree * create_tree();
 void print_preorder_tree(Tree_Node * tree);
+void print_preorder_tree_in_file(Tree_Node * tree, FILE *file);
 
 
 #endif // TREE_H_INCLUDED
