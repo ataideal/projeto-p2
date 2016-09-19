@@ -38,9 +38,9 @@ int main(){
         Tree_Node * x2 = dequeue_pq(pq);
         Tree_Node * p = create_tree_node();
         p->priority = x1->priority + x2->priority;
-        p->left = x1;
-        p->right = x2;
-        sprintf(p->ch,"*",x1->ch,x2->ch);
+        p->right = x1;
+        p->left = x2;
+        sprintf(p->ch,"*");
         pq = enqueue_pq(pq,p);
     }
 

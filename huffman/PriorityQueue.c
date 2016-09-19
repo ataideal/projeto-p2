@@ -33,7 +33,7 @@ Priority_Queue * enqueue_pq(Priority_Queue * pq,Tree_Node * a){
     pq->size++;
     newnode->item = a;
     newnode->priority = a->priority;
-    if(pq_is_empty(pq) || pq->first->priority > a->priority){
+    if(pq_is_empty(pq) || pq->first->priority >= a->priority){
         newnode->next = pq->first;
         pq->first = newnode;
         return pq;

@@ -36,9 +36,10 @@ void print_preorder_tree(Tree_Node * tree){
 void print_preorder_tree_in_file(Tree_Node * tree, FILE *file){
 
     if(tree!=NULL){
-        fprintf(file, "%c", tree->ch);
+        fprintf(file, "%s", tree->ch);
         print_preorder_tree_in_file(tree->left, file);
         print_preorder_tree_in_file(tree->right,file);
     }
 
 }
+
