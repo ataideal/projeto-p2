@@ -1,12 +1,12 @@
 # depslib dependency file v1.0
-1474295584 source:e:\ufal\p2\projeto-p2\huffman\main.c
+1474429412 source:e:\ufal\p2\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"PriorityQueue.h"
 	"Tree.h"
 
-1474295727 source:e:\ufal\p2\projeto-p2\huffman\priorityqueue.c
+1474295952 source:e:\ufal\p2\projeto-p2\huffman\priorityqueue.c
 	<stdio.h>
 	<stdlib.h>
 	"Tree.h"
@@ -15,16 +15,17 @@
 	<stdio.h>
 	<stdlib.h>
 
-1474292891 source:e:\ufal\p2\projeto-p2\huffman\tree.c
+1474429651 source:e:\ufal\p2\projeto-p2\huffman\tree.c
 	<stdio.h>
 	<stdlib.h>
+	<string.h>
 
 1473993690 e:\ufal\p2\projeto-p2\huffman\priorityqueue.h
 	<stdio.h>
 	<stdlib.h>
 	"Tree.h"
 
-1474292739 e:\ufal\p2\projeto-p2\huffman\tree.h
+1474428258 e:\ufal\p2\projeto-p2\huffman\tree.h
 	<stdio.h>
 	<stdlib.h>
 

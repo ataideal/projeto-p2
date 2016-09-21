@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 typedef struct node{
     int priority;
+    int isLeaf;
     char ch[100];
     struct node * left;
     struct node * right;
@@ -36,10 +37,19 @@ void print_preorder_tree(Tree_Node * tree){
 void print_preorder_tree_in_file(Tree_Node * tree, FILE *file){
 
     if(tree!=NULL){
-        fprintf(file, "%s", tree->ch);
+        if(strcmp(tree->ch,"*")!=0)
+            fprintf(file, "%s", tree->ch);
+        else
+            fprintf(file, "%s", tree->ch);
         print_preorder_tree_in_file(tree->left, file);
         print_preorder_tree_in_file(tree->right,file);
     }
 
 }
 
+void print_content_in_file(char hash[255][20], FILE *file,unsigned char * texto){
+    int i=-1;
+    while(texto[++i]!='\0'){
+        fprintf(file,"%s", hash[(int)texto[i]]);
+    }
+}
