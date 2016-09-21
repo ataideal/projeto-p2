@@ -8,17 +8,16 @@ int isLeaf(Tree_Node * tree){
     return tree->isLeaf;
 }
 
-void create_hash(Tree_Node * tree,char hash[255][20],char binary[20],int k){
-    printf("binary:%s node:%s\n",binary,tree->ch);
+void create_hash(Tree_Node * tree,char hash[255][20],char binary[20]){
     if(isLeaf(tree)){
 
         sprintf(hash[(int)tree->ch[0]],"%s",binary);
     }
     else{
         strcat(binary,"0");
-        create_hash(tree->left,hash,binary,k+1);
+        create_hash(tree->left,hash,binary);
         binary[strlen(binary)-1]='1';
-        create_hash(tree->right,hash,binary,k+1);
+        create_hash(tree->right,hash,binary);
         binary[strlen(binary)-1]='\0';
     }
 }
@@ -71,7 +70,7 @@ int main(){
     char hash[255][20];
     char binary [20];
     binary[0]='\0';
-    create_hash(tree->root,hash,binary,0);
+    create_hash(tree->root,hash,binary);
 
     FILE *output_file;
     output_file = fopen("output.txt", "wb+");
