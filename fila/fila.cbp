@@ -38,6 +38,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="priority_queue.h" />
+		<Unit filename="priority_queue_heap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="priority_queue_heap.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
