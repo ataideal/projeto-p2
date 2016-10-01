@@ -1,0 +1,4 @@
+1 - "Nome do arquivo" <- read.table(file.choose(),header=T) //para abrir o arquivo no Rstudio
+2 - summary (nome colocado)
+3 - attach (nome colocado)
+4 - plot (Tamanho, Comparações)
