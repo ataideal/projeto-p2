@@ -135,6 +135,44 @@ Node *MoveToFront (Node *first,int conteudo)
             return first;
 }
 
+Node *TransposeMethod (Node *first, int conteudo)
+{
+    Node *aux = first;
+        while(aux!=NULL)
+        {
+            if(aux->value==conteudo)
+            {
+                if(aux->next==NULL)
+                {
+                    Node *p;
+                    p = aux->prev;
+                    aux->prev=p->prev;
+                    aux->next=p;
+                    p->next=NULL;
+                    p->prev=aux;
+                        if(aux->prev==NULL) return aux;
+                    return first;
+                }
+                else if (aux->prev==NULL)
+                {
+                    return first;
+                }
+                else
+                {
+                    Node *p;
+                    p=aux;
+                    p=aux->prev;
+                    p->next=aux->next;
+                    aux->prev=p->prev;
+
+                }
+            }
+
+
+            aux = aux->next;
+        }
+}
+
 void printDoublyLinkedBackward(Node *first)
 {
     Node *aux;
