@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define DEBUG printf ("AQUI\n");
 
 struct Node
 {
@@ -28,6 +29,7 @@ Node *insertNode (Node *first, int conteudo)
         {
             first->prev = newNode;
         }
+    return newNode;
 }
 
 void searchNode (Node *first, int conteudo)
@@ -39,7 +41,7 @@ void searchNode (Node *first, int conteudo)
             if(aux->value == conteudo)
             {
                 printf ("ACHOU NA POSICAO %d!\n",i);
-                return 0;
+                return ;
             }
             aux=aux->next;
             i++;
@@ -89,27 +91,136 @@ Node *removeNode (Node *first, int conteudo)
             }
 }
 
-Node *MoveToFront (Node *first,int element)
+Node *MoveToFront (Node *first,int conteudo)
 {
+    Node *aux;
+    aux=first;
+     while(aux!=NULL)
+            { //DEBUG;
+                if(aux->value == conteudo)
+                {
+                    printf ("Elemento %d achado!\n",conteudo);
+                    if(aux->next==NULL)
+                    {
+                        aux->prev->next=NULL;
+                        aux->next=first;
+                        aux->prev=NULL;
+                        first->prev=aux;
 
+                        return aux;
+
+                    }
+                    else if (aux->prev == NULL)
+                    {
+                        return aux;
+
+                    }
+                    else
+                    {
+
+
+                        aux->prev->next = aux->next;
+                        aux->next->prev = aux->prev;
+                        aux->next=first;
+                        aux->prev=NULL;
+                        first->prev=aux;
+                        return aux;
+                    }
+
+                }
+
+                aux=aux->next;
+            }
+            printf ("Elemento não existe!\n");
+            return first;
+}
+
+Node *TransposeMethod (Node *first, int conteudo)
+{
+    Node *aux = first;
+    int flag = 0;
+        while(aux!=NULL)
+        {
+
+            if(aux->value==conteudo)
+            {
+                if(aux != first){
+                    Node *p;
+                    p = aux->prev;
+                    if( p->prev != NULL){
+
+                        p->prev->next = aux;
+                        flag = 0;
+                    }
+                    else{
+                        flag = 1;
+                    }
+                    if( aux->next != NULL){
+                        aux->next->prev = p;
+                    }
+                    p->next = aux->next;
+                    aux->prev = p->prev;
+
+                    aux->next = p;
+                    p->prev = aux;
+                    if(!flag)
+                        first = aux;
+
+                    }
+                      return first;
+
+
+                }
+                else
+                    return first;
+
+            }
+
+
+            aux = aux->next;
+        }
 }
 
 void printDoublyLinkedBackward(Node *first)
 {
     Node *aux;
+    aux = first;
         while (aux!=NULL)
         {
-            if(aux!=NULL) printf ("%d\n",aux->conteudo);
+
+            if(aux!=NULL) printf ("%d",aux->value);
             aux=aux->next;
+            if(aux!=NULL)printf("-");
         }
+        printf ("\n");
 
 }
 
 int main ()
 {
-    Node *list = createList();
+    Node *list = newDoubList(list);
 
+    int element,i;
 
+        //printf ("Insira 5 elementos : \n");
+        for(i=0;i<5;i++)
+        {
+            scanf ("%d",&element);
+                list = insertNode(list,element);
+        }//printf ("\n");
+
+        printDoublyLinkedBackward(list);
+
+        //printf ("Escolha o elemento : \n");
+        while(1)
+        {
+            scanf ("%d",&element);
+            //searchNode(list,element);
+                if(element==-1) break;
+            list = TransposeMethod(list,element);
+           //list = MoveToFront(list,element);
+            printDoublyLinkedBackward(list);
+        }
 
 
 
