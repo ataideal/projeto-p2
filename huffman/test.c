@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 int main (){
-    FILE *arq = fopen("output.txt","r");
-    char ch;
+    FILE *arq = fopen("output.txt","rb");
+    unsigned int ch;
 
     while((ch=fgetc(arq))!= EOF){
         printf ("char:%c int:%d\n",ch,ch);

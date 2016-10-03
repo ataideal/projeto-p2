@@ -4,7 +4,7 @@
 typedef struct node{
     int priority;
     int isLeaf;
-    char ch[100];
+    char ch;
     struct node * left;
     struct node * right;
 }Tree_Node;
@@ -28,10 +28,12 @@ Tree * create_tree(){
     a->root = NULL;
     return a;
 }
-
+int isLeaf(Tree_Node * tree){
+    return tree->isLeaf;
+}
 void print_preorder_tree(Tree_Node * tree){
     if(tree!=NULL){
-        printf ("%s:%d\n",tree->ch,tree->priority);
+        printf ("%c %d",tree->ch,tree->priority);
         print_preorder_tree(tree->left);
         print_preorder_tree(tree->right);
     }
@@ -39,16 +41,17 @@ void print_preorder_tree(Tree_Node * tree){
 void print_preorder_tree_in_file(Tree_Node * tree, FILE *file){
 
     if(tree!=NULL){
-        if(strcmp(tree->ch,"*")!=0)
-            fprintf(file, "%s", tree->ch);
+        if((tree->ch=='*' || tree->ch=='\\') && isLeaf(tree))
+            fprintf(file, "\\%c", tree->ch);
         else
-            fprintf(file, "%s", tree->ch);
+            fprintf(file, "%c", tree->ch);
+
         print_preorder_tree_in_file(tree->left, file);
         print_preorder_tree_in_file(tree->right,file);
     }
 
 }
-
+/*
 void print_content_in_file(char hash[255][20], FILE *file,unsigned char * texto){
     char buffer[20];
     buffer[0]='\0';
@@ -73,6 +76,36 @@ void print_content_in_file(char hash[255][20], FILE *file,unsigned char * texto)
         strncat(aux,buffer,8);
         char ch = (int)strtol(aux,NULL,2);
         printf("aux:%s ch:%c int:%d\n",aux,ch,ch);
+        fprintf(file,"%c", ch);
+    }
+}*/
+
+
+void print_content_in_file(char hash[256][40], FILE *arq,FILE *file){
+    char buffer[60];
+    buffer[0]='\0';
+    char aux[8];
+    aux[0]='\0';
+    unsigned int caracter;
+    while((caracter = getc(arq))!=EOF){
+        //printf ("ch:%d %u\n",caracter,(unsigned char)caracter);
+        strcat(buffer,hash[(unsigned char)caracter]);
+        //printf("buffer:%s\n",buffer);
+        while(strlen(buffer)>=8){
+            strncat(aux,buffer,8);
+            char ch = (int)strtol(aux,NULL,2);
+            //printf("aux:%s ch:%c int:%d\n",aux,ch,ch);
+            fprintf(file,"%c", ch);
+            aux[0]='\0';
+            sprintf(buffer,"%s",buffer+8);
+        }
+    }
+    if(strlen(buffer)>0){
+        while(strlen(buffer)<8)
+            strcat(buffer,"0");
+        strncat(aux,buffer,8);
+        char ch = (int)strtol(aux,NULL,2);
+        //printf("aux:%s ch:%c int:%d\n",aux,ch,ch);
         fprintf(file,"%c", ch);
     }
 }
