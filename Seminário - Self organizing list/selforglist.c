@@ -140,32 +140,31 @@ Node *TransposeMethod (Node *first, int conteudo)
     Node *aux = first;
         while(aux!=NULL)
         {
+
             if(aux->value==conteudo)
             {
-                if(aux->next==NULL)
-                {
+                if(aux != first){
                     Node *p;
                     p = aux->prev;
-                    aux->prev=p->prev;
-                    aux->next=p;
-                    p->next=NULL;
-                    p->prev=aux;
-                        if(aux->prev==NULL) return aux;
+                    if( p->prev){
+                        p->prev->next = aux;
+                    }
+                    if( aux->next){
+                        aux->next->prev = p;
+                    }
+                    p->next = aux->next;
+                    aux->prev = p->prev;
+
+                    aux->next = p;
+                    p->prev = aux;
+
                     return first;
-                }
-                else if (aux->prev==NULL)
-                {
-                    return first;
-                }
-                else
-                {
-                    Node *p;
-                    p=aux;
-                    p=aux->prev;
-                    p->next=aux->next;
-                    aux->prev=p->prev;
+
 
                 }
+                else
+                    return first;
+
             }
 
 
@@ -176,8 +175,10 @@ Node *TransposeMethod (Node *first, int conteudo)
 void printDoublyLinkedBackward(Node *first)
 {
     Node *aux;
+    aux = first;
         while (aux!=NULL)
         {
+
             if(aux!=NULL) printf ("%d",aux->value);
             aux=aux->next;
             if(aux!=NULL)printf("-");
@@ -207,8 +208,8 @@ int main ()
             scanf ("%d",&element);
             //searchNode(list,element);
                 if(element==-1) break;
-
-           list = MoveToFront(list,element);
+            list = TransposeMethod(list,element);
+           //list = MoveToFront(list,element);
             printDoublyLinkedBackward(list);
         }
 
