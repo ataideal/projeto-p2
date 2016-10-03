@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define DEBUG printf ("AQUI\n");
+#define MAX_SIZE 5
 
+int count[MAX_SIZE];
 struct Node
 {
     int value;
@@ -179,6 +181,21 @@ Node *TransposeMethod (Node *first, int conteudo)
 
             aux = aux->next;
         }
+
+
+void countMethod(Node *first, int element){
+ Node *aux = first;
+ int countLocal = 0;
+        while(aux!=NULL)
+        {
+             if(aux->value==element)
+                {
+                    count[countLocal]++;
+
+                }
+            countLocal++;
+            aux = aux->next;
+        }
 }
 
 void printDoublyLinkedBackward(Node *first)
@@ -196,14 +213,21 @@ void printDoublyLinkedBackward(Node *first)
 
 }
 
+
+
 int main ()
 {
     Node *list = newDoubList(list);
 
+
+
     int element,i;
+    for(i = 0; i<MAX_SIZE;i++){
+        count[i] = 0;
+    }
 
         //printf ("Insira 5 elementos : \n");
-        for(i=0;i<5;i++)
+        for(i=0;i<MAX_SIZE;i++)
         {
             scanf ("%d",&element);
                 list = insertNode(list,element);
@@ -217,9 +241,23 @@ int main ()
             scanf ("%d",&element);
             //searchNode(list,element);
                 if(element==-1) break;
-            list = TransposeMethod(list,element);
+
+            //Transpose Method
+            //list = TransposeMethod(list,element);
+
+            //CountMethod
+            //countMethod(list,element);
+
+            //Imprime Count
+            //for(i = 0; i<MAX_SIZE;i++){
+              //printf("%d", count[i]);
+            //}
+
+            //MoveToFrontMethod
            //list = MoveToFront(list,element);
-            printDoublyLinkedBackward(list);
+
+           //Imprime List
+            //printDoublyLinkedBackward(list);
         }
 
 
