@@ -138,6 +138,7 @@ Node *MoveToFront (Node *first,int conteudo)
 Node *TransposeMethod (Node *first, int conteudo)
 {
     Node *aux = first;
+    int flag = 0;
         while(aux!=NULL)
         {
 
@@ -146,10 +147,15 @@ Node *TransposeMethod (Node *first, int conteudo)
                 if(aux != first){
                     Node *p;
                     p = aux->prev;
-                    if( p->prev){
+                    if( p->prev != NULL){
+
                         p->prev->next = aux;
+                        flag = 0;
                     }
-                    if( aux->next){
+                    else{
+                        flag = 1;
+                    }
+                    if( aux->next != NULL){
                         aux->next->prev = p;
                     }
                     p->next = aux->next;
@@ -157,8 +163,11 @@ Node *TransposeMethod (Node *first, int conteudo)
 
                     aux->next = p;
                     p->prev = aux;
+                    if(!flag)
+                        first = aux;
 
-                    return first;
+                    }
+                      return first;
 
 
                 }
