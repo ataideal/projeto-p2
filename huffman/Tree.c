@@ -33,7 +33,7 @@ int isLeaf(Tree_Node * tree){
 }
 void print_preorder_tree(Tree_Node * tree){
     if(tree!=NULL){
-        printf ("%c %d",tree->ch,tree->priority);
+        printf ("%c - ",tree->ch);
         print_preorder_tree(tree->left);
         print_preorder_tree(tree->right);
     }
