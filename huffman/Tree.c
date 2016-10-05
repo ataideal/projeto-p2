@@ -22,6 +22,15 @@ Tree_Node * create_tree_node(){
     a->priority = 0;
     return a;
 }
+Tree_Node * create_tree_node_1(Tree_Node * a, unsigned int ch){
+    a = (Tree_Node*)malloc(sizeof(Tree_Node));
+    a->ch = ch;
+    a->left = NULL;
+    a->right = NULL;
+    a->priority = 0;
+    return a;
+}
+
 Tree * create_tree(){
     Tree *a = (Tree*)malloc(sizeof(Tree));
     a->size = 0;
@@ -33,7 +42,10 @@ int isLeaf(Tree_Node * tree){
 }
 void print_preorder_tree(Tree_Node * tree){
     if(tree!=NULL){
-        printf ("%c - ",tree->ch);
+        if((tree->ch=='*' || tree->ch=='\\') && isLeaf(tree))
+            printf("\\%c", tree->ch);
+        else
+            printf("%c", tree->ch);
         print_preorder_tree(tree->left);
         print_preorder_tree(tree->right);
     }

@@ -34,34 +34,79 @@ unsigned int get_tree_size(FILE *input_file) {
 
 	return (tree_size); /* retorna o valor que estava escrito */
 }
-unsigned int *get_tree_array(FILE *input_file, unsigned int tree_size) {
+unsigned int *get_tree_array(FILE *input_file, unsigned int * tree_size) {
     unsigned int i;
 
 	/* cria um array com o tamanho da árvore recebido */
 	int *tree_array;
-	tree_array = (unsigned int *)malloc(sizeof(unsigned int)*(tree_size));
+    tree_array = (unsigned int *)malloc(sizeof(unsigned int)*((*tree_size)+2));
 	/* vai até o terceito byte do arquivo para receber os caracteres (o ter-
 	 * ceiro byte é o primeiro byte da árvore) */
 	fseek(input_file, 2, 0);
 
 	/* recebe os caracteres em sequencia tree_size vezes */
-	for (i = 0; i < tree_size; i++) {
-		tree_array[i] = getc(input_file);
-		printf("%c", tree_array[i]);
-	}
+	for (i = 0; i < (*tree_size); i++) {
+	tree_array[i] = getc(input_file);
+        if(tree_array[i] == '\\'){
+            (*tree_size)++;
+            i++;
+            tree_array[i] = getc(input_file);
+        }
+    }
+
+    for (i = 0; i < (*tree_size); i++) {
+            printf("%c",tree_array[i]);
+    }
 	return (tree_array); /* retorna o endereço para o array criado */
 }
-Tree_Node *get_tree(FILE *input_file, unsigned int tree_size){
-    if (tree_size == 0) {
-		return NULL;
-	}
+
+Tree_Node* fill_tree(Tree_Node * tree, unsigned int * vetor,int *atual,int tamanho){
+    //printf ("%d ",*atual);
+    if(*atual>tamanho)
+        return NULL;
+
+    if(vetor[*atual]=='\\' && (vetor[(*atual)+1]=='\\' || vetor[(*atual)+1]=='*')){
+        (*atual)++;
+        tree = create_tree_node_1(tree,vetor[*atual]);
+        tree->isLeaf=1;
+        (*atual)++;
+        return tree;
+    }
+
+    if(tree==NULL)
+        tree = create_tree_node_1(tree,vetor[*atual]);
+
+    if(vetor[*atual]=='*'){
+        (*atual)++;
+        tree->isLeaf=0;
+        tree->left = fill_tree(tree->left,vetor,atual,tamanho);
+        tree->right = fill_tree(tree->right,vetor,atual,tamanho);
+    }else{
+        (*atual)++;
+        tree->isLeaf=1;
+    }
+
+    return tree;
+}
+
+Tree_Node *get_tree(FILE *input_file){
+    unsigned int tree_size = get_tree_size(input_file);
 	/* recebe o array com a árvore em pré-ordem */
 	unsigned int *tree_array;
-	tree_array = get_tree_array(input_file, tree_size);
+	tree_array = get_tree_array(input_file, &tree_size);
 
+    Tree_Node * tree = NULL;
+    int atual=0;
+    printf ("\n");
+    tree = fill_tree(tree,tree_array,&atual,tree_size);
+    printf ("\n%d\n",tree_size);
+    print_preorder_tree(tree);
 
-
+    return tree;
 }
+
+
+
 
 void create_hash(Tree_Node * tree,char hash[256][40],char binary[40]){
     if(isLeaf(tree)){
@@ -99,11 +144,12 @@ int main(){
             int vetor[256];
     switch(pick){
         case 2:
-
             trash_size = get_trash_size(arquivo);
-            printf("%d\n", trash_size);
-            printf("%d\n", get_tree_size(arquivo));
-            get_tree(arquivo,get_tree_size(arquivo));
+            //printf("%d\n", trash_size);
+            //printf("%d\n", get_tree_size(arquivo));
+            Tree * t1 = create_tree();
+            t1->root = get_tree(arquivo);
+
             break;
         case 1:
 

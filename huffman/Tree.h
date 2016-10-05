@@ -18,6 +18,7 @@ typedef struct tree{
 }Tree;
 
 Tree_Node * create_tree_node();
+Tree_Node * create_tree_node_1(Tree_Node * a,unsigned int ch);
 Tree * create_tree();
 int isLeaf(Tree_Node * tree);
 void print_preorder_tree(Tree_Node * tree);
