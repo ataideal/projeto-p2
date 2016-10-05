@@ -13,6 +13,8 @@ struct Heap
     int size;
     int priority;
     int current_size;
+    int compara;
+    int maxSize;
     struct Element *data;
 };
 
@@ -46,6 +48,8 @@ Heap *create_heap()
     Heap *aux = (Heap *) malloc (sizeof (Heap));
     aux->size=0;
     aux->current_size=12;
+    aux->compara=0;
+    aux->maxSize=100;
     aux->data = (Element*) calloc (12,sizeof(Element));
 
     return aux;
@@ -73,14 +77,27 @@ void enqueue_heap (Heap *heap, int priority, int value)
 
         int key_index = heap->size;
         int parent_index = get_parent_index(heap,heap->size);
+        heap->compara++;
 
         while (parent_index>=1 && heap->data[key_index].priority > heap->data[parent_index].priority)
         {
+            heap->compara++;
             swapData(&heap->data[key_index],&heap->data[parent_index]);
 
             key_index = parent_index;
 
             parent_index = get_parent_index(heap,key_index);
+        }
+
+        if(heap->size == heap->maxSize)
+        {
+            FILE *aux;
+                aux = fopen("generate_output_heap.txt","a");
+                fprintf (aux,"%d %d\n",heap->size,heap->compara);
+                fclose(aux);
+
+            heap->maxSize+=100;
+            heap->compara=0;
         }
 
 
@@ -130,16 +147,5 @@ void max_heapify(Heap *heap, int i)
     {
         swapData(&heap->data[i], &heap->data[largest]);
         max_heapify(heap,largest);
-    }
-}
-
-void heapsort(Heap *heap)
-{
-    int i;
-    for(i=heap->size;i>=2;i--)
-    {
-        swapData(&heap->data[1],&heap->data[i]);
-        heap->size--;
-        max_heapify(heap,1);
     }
 }
