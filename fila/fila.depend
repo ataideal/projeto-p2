@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1475636264 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\main.c
+1475636798 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\main.c
 	<stdio.h>
 	<stdlib.h>
+	<time.h>
 	"priority_queue.h"
 	"priority_queue_heap.h"
 	"generate.h"
