@@ -12,6 +12,9 @@ struct Node
 typedef struct Node Node;
 struct priorityQueue
 {
+    int size;
+    int compara;
+    int maxSize;
     Node *First;
 };
 typedef struct priorityQueue priorityQueue;
@@ -25,6 +28,9 @@ priorityQueue *createPriorityQueue()
 {
     priorityQueue *newP = (priorityQueue*) malloc (sizeof(priorityQueue));
     newP->First=NULL;
+    newP->compara=0;
+    newP->size=0;
+    newP->maxSize=100;
     return newP;
 }
 
@@ -36,6 +42,7 @@ priorityQueue *enqueue (priorityQueue *pq, int elemento, int p)
     aux->priority=p;
         if(isEmpty(pq) || p > pq->First->priority)
         {
+            if(!isEmpty(pq)) pq->compara++;
             aux->next=pq->First;
             pq->First = aux;
         }
@@ -45,12 +52,26 @@ priorityQueue *enqueue (priorityQueue *pq, int elemento, int p)
 
             while(current->next!=NULL && current->next->priority>p)
             {
+                pq->compara++;
                 current=current->next;
             }
             aux->next=current->next;
             current->next=aux;
 
         }
+        pq->size++;
+
+        if(pq->size==pq->maxSize)
+        {
+            FILE *aux;
+                aux=fopen("generate_output_pq.txt","a");
+            fprintf(aux,"%d %d\n",pq->size,pq->compara);
+            fclose(aux);
+
+            pq->compara=0;
+            pq->maxSize+=100;
+        }
+
         return pq; //Pois tem que atualizar a cabeça da fila mesmo que não tenha sido inserido em ultimo ou primeiro.
 }
 
@@ -69,6 +90,7 @@ int dequeue (priorityQueue *pq)
     {
         printf ("empty");
     }
+    return 0;
 }
 
 void printQueue (priorityQueue *pq)

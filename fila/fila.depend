@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1474153176 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\main.c
+1475636264 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\main.c
 	<stdio.h>
 	<stdlib.h>
 	"priority_queue.h"
 	"priority_queue_heap.h"
+	"generate.h"
 
-1474153445 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue.c
+1475636567 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue.c
 	<stdio.h>
 	<stdlib.h>
 	"priority_queue.h"
@@ -14,8 +15,15 @@
 
 1474153102 c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.h
 
-1474153209 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.c
+1475636567 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.c
 	<stdio.h>
 	<stdlib.h>
 	"priority_queue_heap.h"
+
+1475634277 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\generate.c
+	<stdio.h>
+	<stdlib.h>
+	"generate.h"
+
+1475633892 c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\generate.h
 
