@@ -13,9 +13,10 @@ int main()
    Heap *newHeap = create_heap();
 
    int i=0;
-
+    srand(time(NULL));
    for(i=0;i<1000;i++)
    {
+
        int element = rand()%1000;
        printf ("Element : %d\n",element);
        enqueue(pq,element,element);

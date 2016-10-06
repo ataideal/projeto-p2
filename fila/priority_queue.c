@@ -64,7 +64,7 @@ priorityQueue *enqueue (priorityQueue *pq, int elemento, int p)
         if(pq->size==pq->maxSize)
         {
             FILE *aux;
-                aux=fopen("generate_output_pq.txt","a");
+            aux=fopen("generate_output_pq.txt","a");
             fprintf(aux,"%d %d\n",pq->size,pq->compara);
             fclose(aux);
 

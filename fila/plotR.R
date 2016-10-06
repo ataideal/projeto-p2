@@ -1,0 +1,5 @@
+heap = read.table(file.choose())
+pq = read.table(file.choose())
+plot(pq$V1,pq$V2, type="l",xlim = c(0,1000), ylim = c(0,50000), col="blue", ylab="Comparações", xlab="Tamanho")
+lines(heap$V1,heap$V2, col="red")
+legend('topleft',c("PQ","HEAP"),lty=1,col=c('blue','red'), bty=2)

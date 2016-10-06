@@ -28,3 +28,32 @@
 
 1475633892 c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\generate.h
 
+1475721046 source:c:\users\casa\repositories\projeto-p2\fila\generate.c
+	<stdio.h>
+	<stdlib.h>
+	"generate.h"
+
+1475721046 c:\users\casa\repositories\projeto-p2\fila\generate.h
+
+1475722805 source:c:\users\casa\repositories\projeto-p2\fila\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"priority_queue.h"
+	"priority_queue_heap.h"
+	"generate.h"
+
+1474135290 c:\users\casa\repositories\projeto-p2\fila\priority_queue.h
+
+1475454177 c:\users\casa\repositories\projeto-p2\fila\priority_queue_heap.h
+
+1475722835 source:c:\users\casa\repositories\projeto-p2\fila\priority_queue.c
+	<stdio.h>
+	<stdlib.h>
+	"priority_queue.h"
+
+1475722838 source:c:\users\casa\repositories\projeto-p2\fila\priority_queue_heap.c
+	<stdio.h>
+	<stdlib.h>
+	"priority_queue_heap.h"
+
