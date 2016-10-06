@@ -129,6 +129,67 @@ void size_tree(Tree_Node* tree, int * size){
     size_tree(tree->right,size);
 }
 
+void descomprimir(FILE *input_file, unsigned int trash_size, Tree_Node *huff_tree) {
+
+                int tree_size = get_tree_size(input_file);
+
+                Tree_Node *current_Node = huff_tree;
+
+                FILE *outputFile = fopen("outputDec.txt","a");
+
+				fseek(input_file,0, SEEK_END);
+				int total_bytes = ftell(input_file);
+				printf("\nTotal Bytes%d", total_bytes);
+				fseek(input_file, (2+tree_size),SEEK_SET);
+
+                char currentByte = getc(input_file);
+
+                int byte;
+                int bit;
+
+                printf("\n%d\n", (2+tree_size));
+
+                for(byte = (2+tree_size); byte < (total_bytes-1);byte++){
+
+                    for(bit = 7;bit >= 0 ;bit--){
+                            if(is_bit_set(currentByte,bit)){
+                                if(current_Node->right != NULL)
+                                    current_Node = current_Node->right;
+                            }
+                            else
+                                if(current_Node->left != NULL)
+                                    current_Node = current_Node->left;
+                            if(current_Node->isLeaf == 1){
+                                //printf("\nLeaf : %c",current_Node->ch);
+                                fprintf(outputFile,"%c",current_Node->ch);
+                                current_Node = huff_tree;
+                            }
+                    }
+                    currentByte = getc(input_file);
+                }
+
+                 for(bit = 7;bit >= (signed int) trash_size ;bit--){
+
+                    if(is_bit_set(currentByte,bit)){
+                                if(current_Node->right != NULL)
+                                    current_Node = current_Node->right;
+                            }
+                            else
+                                if(current_Node->left != NULL)
+                                    current_Node = current_Node->left;
+                            if(current_Node->isLeaf == 1){
+                                //printf("\nLeaf : %c",current_Node->ch);
+                                fprintf(outputFile,"%c",current_Node->ch);
+                                current_Node = huff_tree;
+                            }
+                 }
+
+				}
+int is_bit_set(unsigned int character, int position) {
+	unsigned int mask = 1 << position;
+	return (mask & character);
+}
+
 
 /**< apsokdopaskdopasokpdopsadsda */
 int main(){
@@ -149,7 +210,7 @@ int main(){
             //printf("%d\n", get_tree_size(arquivo));
             Tree * t1 = create_tree();
             t1->root = get_tree(arquivo);
-
+            descomprimir(arquivo,trash_size,t1->root);
             break;
         case 1:
 

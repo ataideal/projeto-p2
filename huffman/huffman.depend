@@ -29,7 +29,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1475551527 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
+1475733172 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -41,7 +41,7 @@
 	<stdlib.h>
 	"Tree.h"
 
-1475540444 c:\users\casa\repositories\projeto-p2\huffman\tree.h
+1475721046 c:\users\casa\repositories\projeto-p2\huffman\tree.h
 	<stdio.h>
 	<stdlib.h>
 
@@ -50,7 +50,7 @@
 	<stdlib.h>
 	"Tree.h"
 
-1475551626 source:c:\users\casa\repositories\projeto-p2\huffman\tree.c
+1475721046 source:c:\users\casa\repositories\projeto-p2\huffman\tree.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
