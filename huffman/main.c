@@ -129,28 +129,30 @@ void size_tree(Tree_Node* tree, int * size){
     size_tree(tree->right,size);
 }
 
-void descomprimir(FILE *input_file, unsigned int trash_size, Tree_Node *huff_tree) {
+int size_tree_1(Tree_Node* tree){
+	if(tree==NULL)
+        return 0;
+    return 1 + size_tree_1(tree->left) + size_tree_1(tree->right);
+}
 
-                int tree_size = get_tree_size(input_file);
 
+int is_bit_set(unsigned int character, int position) {
+	unsigned int mask = 1 << position;
+	return (mask & character);
+}
+
+void descomprimir(FILE *input_file) {
+                int trash_size = get_trash_size(input_file);
+                //printf("%d\n", trash_size);
+                //printf("%d\n", get_tree_size(arquivo));
+                Tree_Node *huff_tree = get_tree(input_file);
                 Tree_Node *current_Node = huff_tree;
+                FILE *outputFile = fopen("descompressed.txt","wb+");
 
-                FILE *outputFile = fopen("outputDec.txt","a");
-
-				fseek(input_file,0, SEEK_END);
-				int total_bytes = ftell(input_file);
-				printf("\nTotal Bytes%d", total_bytes);
-				fseek(input_file, (2+tree_size),SEEK_SET);
-
-                char currentByte = getc(input_file);
-
-                int byte;
+                unsigned int currentByte = getc(input_file);
                 int bit;
-
-                printf("\n%d\n", (2+tree_size));
-
-                for(byte = (2+tree_size); byte < (total_bytes-1);byte++){
-
+                unsigned int nextByte;
+                while((nextByte=getc(input_file))!=EOF){
                     for(bit = 7;bit >= 0 ;bit--){
                             if(is_bit_set(currentByte,bit)){
                                 if(current_Node->right != NULL)
@@ -165,10 +167,10 @@ void descomprimir(FILE *input_file, unsigned int trash_size, Tree_Node *huff_tre
                                 current_Node = huff_tree;
                             }
                     }
-                    currentByte = getc(input_file);
+                    currentByte = nextByte;
                 }
 
-                 for(bit = 7;bit >= (signed int) trash_size ;bit--){
+                 for(bit = 7;bit >= (signed int)trash_size ;bit--){
 
                     if(is_bit_set(currentByte,bit)){
                                 if(current_Node->right != NULL)
@@ -184,11 +186,8 @@ void descomprimir(FILE *input_file, unsigned int trash_size, Tree_Node *huff_tre
                             }
                  }
 
-				}
-int is_bit_set(unsigned int character, int position) {
-	unsigned int mask = 1 << position;
-	return (mask & character);
 }
+
 
 
 /**< apsokdopaskdopasokpdopsadsda */
@@ -200,17 +199,11 @@ int main(){
     printf("\n1 -- Comprimir\n2 -- Descomprimir\n");
     int pick = 2;
     scanf("%d",&pick);
-     unsigned int trash_size;
      int i;
             int vetor[256];
     switch(pick){
         case 2:
-            trash_size = get_trash_size(arquivo);
-            //printf("%d\n", trash_size);
-            //printf("%d\n", get_tree_size(arquivo));
-            Tree * t1 = create_tree();
-            t1->root = get_tree(arquivo);
-            descomprimir(arquivo,trash_size,t1->root);
+            descomprimir(arquivo);
             break;
         case 1:
 
@@ -288,6 +281,7 @@ int main(){
             itoa(tree->size,tamanho,2);
 
             char first[16];
+            first[0]='\0';
             int aux1 = 3-strlen(lixo);
 
             if(aux1==1)
@@ -305,7 +299,7 @@ int main(){
 
             FILE *output_file;
             arquivo = fopen(texto,"rb");
-            output_file = fopen("output.huff", "wb+");
+            output_file = fopen("compressed.huff", "wb+");
             print_preorder_tree(tree->root);
             printf_first_bits_in_file(first,output_file);
             print_preorder_tree_in_file(tree->root,output_file);
@@ -316,5 +310,6 @@ int main(){
 
             return 0;
             break;
-}
+    }
+    return 0;
 }

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1475641346 source:e:\ufal\p2\projeto-p2\huffman\main.c
+1475808403 source:e:\ufal\p2\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -15,7 +15,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1475637580 source:e:\ufal\p2\projeto-p2\huffman\tree.c
+1475642159 source:e:\ufal\p2\projeto-p2\huffman\tree.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
