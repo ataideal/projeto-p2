@@ -1,18 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Tree.h"
-
-typedef struct pq_node{
-    Tree_Node * item;
-    struct pq_node * next;
-    int priority;
-}PQ_Node;
-
-typedef struct priority_queue{
-    PQ_Node * first;
-    int size;
-}Priority_Queue;
-
+#include "PriorityQueue.h"
 
 Priority_Queue * create_priority_queue(){
     Priority_Queue * pq = (Priority_Queue*)malloc(sizeof(Priority_Queue));

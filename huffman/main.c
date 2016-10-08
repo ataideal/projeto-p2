@@ -3,312 +3,168 @@
 #include <string.h>
 #include "PriorityQueue.h"
 #include "Tree.h"
+#include "HashFunctions.h"
 
-unsigned int get_trash_size(FILE *input_file) {
-	unsigned int trash_size = 0;
-	unsigned int first_byte;
-	fseek(input_file, 0, SEEK_SET);
-	first_byte = getc(input_file);
-	trash_size = (unsigned int)(first_byte >> (5));
-	return (trash_size);
+int get_bit_at_position(unsigned int character, int position) {
+	unsigned int mask = 1 << position; /*Pega o binário de 1 "000000001" e desloca a esquerda N vezes.*/
+	return (mask & character); /*Retorna exatamente o binário da quantidade de posicoes que deslocamos o 1.*/
+	/*	Ex: Caracter A, Posicion 2;
+        Binário do 1 '00000001', deslocando 6 pra esquerda: '01000000';
+        retorna a operação AND entre o Binário do A '01000001' e '01000000'.
+        retorna '01000000';	*/
 }
-unsigned int get_tree_size(FILE *input_file) {
-	unsigned int tree_size;
-	unsigned char first_byte;
-	unsigned int second_byte;
+void descomprimir(FILE *input_file) {
+    int trash_size = get_trash_size(input_file); /*Pega o tamanho do lixo.*/
+    Tree_Node *huff_tree = get_tree(input_file); /*Cria lê a árvore do arquivo e a reconstrói.*/
+    Tree_Node *current_Node = huff_tree; /*Cria um nó auxiliar pro início da árvore.*/
+    FILE *outputFile = fopen("descompressed","wb+");
 
-	fseek(input_file, 0, SEEK_SET); /* volta ao início do arquivo */
+    unsigned int currentByte = getc(input_file);/*Variável pro char atual.*/
+    unsigned int nextByte; /*Variável pro proximo char atual.*/
+    int bit;/*Auxiliar pro for*/
 
-	/* recebe os dois primeiros bytes do arquivo */
-	first_byte = getc(input_file);
-	second_byte = getc(input_file);
+    while((nextByte=getc(input_file))!=EOF){/*Verifica se o proximo char não é o final do arquivo, e armazena ele.*/
+        for(bit = 7;bit >= 0 ;bit--){ /*For começando do primeiro bit do 7 bit, contando da direita pra esquerda.*/
+            if(get_bit_at_position(currentByte,bit)){ /*Verifica cada bit do caracter, se nao for 0, ele vai pra esquerda da árvore.*/
+                if(current_Node->right != NULL)
+                    current_Node = current_Node->right; /*Atualiza o nó atual da árvore pra o nó a direita.*/
+            }
+            else /*Se for 0, ele vai pra esquerda da árvore.*/
+                if(current_Node->left != NULL)
+                    current_Node = current_Node->left;/*Atualiza o nó atual da árvore pra o nó a direita.*/
 
-	/* apaga os três primeiros bits do primeiro byte, pois só interessa os 5
-	 * bits restantes */
-	first_byte = (first_byte << 3);
-	first_byte = (first_byte >> 3);
+            if(current_Node->isLeaf == 1){/*Se o nó que chegamos for uma folha, escrevemos ele no arquivo.*/
+                fprintf(outputFile,"%c",current_Node->ch);
+                current_Node = huff_tree; /*Nó atual vai ser novamente o ínicio da árvore.*/
+            }
+        }
+        currentByte = nextByte;/*Atualiza o byte atual do arquivo*/
+    }
 
-	/* o tamanho da árvore é a união entre os 5 últimos bits do primeiro byte
-	 * e o segundo byte */
-	tree_size = ((first_byte << 8) | second_byte);
+    /* Ultimo byte do arquivo.*/
+    for(bit = 7;bit >= (signed int)trash_size ;bit--){ /*Repete o processo acima, mas não considera os bits de lixo */
+        if(get_bit_at_position(currentByte,bit)){
+            if(current_Node->right != NULL)
+                current_Node = current_Node->right;
+        }
+        else
+            if(current_Node->left != NULL)
+                current_Node = current_Node->left;
 
-	return (tree_size); /* retorna o valor que estava escrito */
+        if(current_Node->isLeaf == 1){
+            fprintf(outputFile,"%c",current_Node->ch);
+            current_Node = huff_tree;
+        }
+    }
 }
-unsigned int *get_tree_array(FILE *input_file, unsigned int * tree_size) {
-    unsigned int i;
 
-	/* cria um array com o tamanho da árvore recebido */
-	int *tree_array;
-    tree_array = (unsigned int *)malloc(sizeof(unsigned int)*((*tree_size)+2));
-	/* vai até o terceito byte do arquivo para receber os caracteres (o ter-
-	 * ceiro byte é o primeiro byte da árvore) */
-	fseek(input_file, 2, 0);
+void comprimir (FILE * arquivo,char * path){
+    int vetor[256]; /*Vetor para contar os caracteres.*/
+    int i;
 
-	/* recebe os caracteres em sequencia tree_size vezes */
-	for (i = 0; i < (*tree_size); i++) {
-	tree_array[i] = getc(input_file);
-        if(tree_array[i] == '\\'){
-            (*tree_size)++;
-            i++;
-            tree_array[i] = getc(input_file);
+    for(i=0;i<256;i++){
+        vetor[i]=0;
+    }
+
+    unsigned int ch;
+    while((ch = getc(arquivo))!=EOF){/*Le todos os caracteres do arquivo, 1 por 1.*/
+        vetor[ch]++;
+    }
+    fclose(arquivo);
+
+    Priority_Queue * pq = create_priority_queue();/*Cria a PQ de nós de árvore.*/
+
+    for(i=0;i<256;i++){ /*For para inserir todos os caracteres na arvore.*/
+        if(vetor[i] !=0){ /*Verifica se esse caracter existe no texto.*/
+            Tree_Node * a = create_tree_node(); /*Cria o nó que vai ser adicionado na árvore.*/
+            a->priority = vetor[i]; /*Prioridade do nó será a quantidade de vezes que o caracter aparece no texto.*/
+            a->isLeaf=1;/*Todos os caracteres do texto são folhas.*/
+            a->ch = i; /*Seta o char no nó.*/
+            pq = enqueue_pq(pq,a); /*Insere o nó na PQ*/
         }
     }
 
-    for (i = 0; i < (*tree_size); i++) {
-            printf("%c",tree_array[i]);
-    }
-	return (tree_array); /* retorna o endereço para o array criado */
-}
-
-Tree_Node* fill_tree(Tree_Node * tree, unsigned int * vetor,int *atual,int tamanho){
-    //printf ("%d ",*atual);
-    if(*atual>tamanho)
-        return NULL;
-
-    if(vetor[*atual]=='\\' && (vetor[(*atual)+1]=='\\' || vetor[(*atual)+1]=='*')){
-        (*atual)++;
-        tree = create_tree_node_1(tree,vetor[*atual]);
-        tree->isLeaf=1;
-        (*atual)++;
-        return tree;
+    while(size_pq(pq)>1){ /*Faz um loop que junta todos os nós, até sobrar somente um nó (nó raiz).*/
+        Tree_Node * x1 = dequeue_pq(pq); /* Pega o nó com menor prioriodade da árvore.*/
+        Tree_Node * x2 = dequeue_pq(pq);/* Pega o nó com menor prioriodade da árvore.*/
+        Tree_Node * p = create_tree_node(); /*Cria um novo nó.*/
+        p->priority = x1->priority + x2->priority; /*Novo nó tem a soma das prioridades de x1 e x2.*/
+        p->left = x1; /* Nó da esquerda será o x1.*/
+        p->right = x2; /* Nó da direita será o x2.*/
+        p->isLeaf=0; /*O nó p será a junção de 2 nós, portanto não é folha */
+        p->ch='*'; /*Seto '*' para o nó.*/
+        pq = enqueue_pq(pq,p); /*Insiro este novo nó na PQ.*/
     }
 
-    if(tree==NULL)
-        tree = create_tree_node_1(tree,vetor[*atual]);
+    Tree * tree = create_tree();/*Cria a árvore.*/
+    tree->root = dequeue_pq(pq);/*A árvore será o nó restante da PQ.*/
+    tree->size = size_tree(tree->root); /*Percorre toda a árvore e conta os nós.*/
 
-    if(vetor[*atual]=='*'){
-        (*atual)++;
-        tree->isLeaf=0;
-        tree->left = fill_tree(tree->left,vetor,atual,tamanho);
-        tree->right = fill_tree(tree->right,vetor,atual,tamanho);
-    }else{
-        (*atual)++;
-        tree->isLeaf=1;
+    char hash[256][40]; /* Cria um 'hashmap' que vai armazenar a nova representação de bits de cada caracter do texto. 256 porque é quantos caracteres existem, e 40 porque é o tamanho 'máximo' da representação.*/
+    char binary [40]; /* String auxiliar para usar no preenchimento da hashh.*/
+    binary[0]='\0'; /*Zerando a String auxiliar.*/
+    create_hash(tree->root,hash,binary); /*Função para preencher a hash recursivamente.*/
+
+    int bits_size=0; /*Variável para saber quantos bits o novo texto terá.*/
+    for(i=0;i<256;i++){
+        bits_size += strlen(hash[i]) * vetor[i]; /*Multiplica a quantidade de bits da nova representação pela quantidade de vez que o caracter aparece no texto, e soma para a quantidade total de bits.*/
     }
 
-    return tree;
+    int garbage = 8 - bits_size%8; /* Calcula o tamanho do lixo. Pega o resto da divisão do tamanho de bits total por 8, e subtrai de 8.*/
+    if (garbage==8)/*Se o cálculo do lixo der 8, é porque não existe lixo.*/
+        garbage=0;
+
+
+    char lixo[3]; /*String para o tamanho do lixo em bits.*/
+    char tamanho[13];/*String para o tamanho da árvore em bits.*/
+
+    itoa(garbage,lixo,2); /*Escreve na string o tamanho do lixo em binário.*/
+    itoa(tree->size,tamanho,2); /*Escreve na string o tamanho da árvore em binário.*/
+
+    char first[16]; /* Variável que será os 2 dois primeiros bytes do arquivo, em binário.*/
+    first[0]='\0';
+
+    int aux1 = 3-strlen(lixo); /* Verifica com quantos bits ele escreveu o lixo. */
+    while(aux1-- != 0) /* Completar com '0' a quantidade de bits que faltar.*/
+        strcat(first,"0");
+
+    strcat(first,lixo); /*Escrever os bits do lixo na string dos 16 primeiros bits.*/
+
+    int aux = 13-strlen(tamanho); /* Verifica com quantos bits ele escreveu o tamanho da árvore. */
+    while(aux-- != 0) /* Completar com '0' a quantidade de bits que faltar.*/
+        strcat(first,"0");
+
+    strcat (first,tamanho); /*Escrever os bits da árvore na string dos 16 primeiros bits.*/
+
+    FILE *output_file = fopen("compressed.huff", "wb+");  /*Cria o arquivo de saída da compressão.*/
+    arquivo = fopen(path,"rb"); /*Abre novamente o arquivo que será comprimido.*/
+
+    printf_first_bits_in_file(first,output_file);/*Transforma os 16 primeiros bits em 2 bytes, e imprime no arquivo de saída.*/
+    print_preorder_tree_in_file(tree->root,output_file); /*Imprime a árvore em pré-ordem no arquivo de saída.*/
+    print_content_in_file(hash,arquivo,output_file); /*Imprime o texto comprimido.*/
+
+    printf ("Compressao completa!\nArquivo:compressed.huff\nTamanho do lixo:%d\nTamanho da arvore:%d\n",garbage,tree->size);
+
+    fclose(arquivo);
+    fclose(output_file);
 }
 
-Tree_Node *get_tree(FILE *input_file){
-    unsigned int tree_size = get_tree_size(input_file);
-	/* recebe o array com a árvore em pré-ordem */
-	unsigned int *tree_array;
-	tree_array = get_tree_array(input_file, &tree_size);
-
-    Tree_Node * tree = NULL;
-    int atual=0;
-    printf ("\n");
-    tree = fill_tree(tree,tree_array,&atual,tree_size);
-    printf ("\n%d\n",tree_size);
-    print_preorder_tree(tree);
-
-    return tree;
-}
-
-
-
-
-void create_hash(Tree_Node * tree,char hash[256][40],char binary[40]){
-    if(isLeaf(tree)){
-        sprintf(hash[(unsigned char)tree->ch],"%s",binary);
-    }
-    else{
-        strcat(binary,"0");
-        create_hash(tree->left,hash,binary);
-        binary[strlen(binary)-1]='1';
-        create_hash(tree->right,hash,binary);
-        binary[strlen(binary)-1]='\0';
-    }
-}
-
-void size_tree(Tree_Node* tree, int * size){
-	if(tree==NULL)
-        return;
-    (*size)++;
-    size_tree(tree->left,size);
-    size_tree(tree->right,size);
-}
-
-int size_tree_1(Tree_Node* tree){
-	if(tree==NULL)
-        return 0;
-    return 1 + size_tree_1(tree->left) + size_tree_1(tree->right);
-}
-
-
-int is_bit_set(unsigned int character, int position) {
-	unsigned int mask = 1 << position;
-	return (mask & character);
-}
-
-void descomprimir(FILE *input_file) {
-                int trash_size = get_trash_size(input_file);
-                //printf("%d\n", trash_size);
-                //printf("%d\n", get_tree_size(arquivo));
-                Tree_Node *huff_tree = get_tree(input_file);
-                Tree_Node *current_Node = huff_tree;
-                FILE *outputFile = fopen("descompressed.txt","wb+");
-
-                unsigned int currentByte = getc(input_file);
-                int bit;
-                unsigned int nextByte;
-                while((nextByte=getc(input_file))!=EOF){
-                    for(bit = 7;bit >= 0 ;bit--){
-                            if(is_bit_set(currentByte,bit)){
-                                if(current_Node->right != NULL)
-                                    current_Node = current_Node->right;
-                            }
-                            else
-                                if(current_Node->left != NULL)
-                                    current_Node = current_Node->left;
-                            if(current_Node->isLeaf == 1){
-                                //printf("\nLeaf : %c",current_Node->ch);
-                                fprintf(outputFile,"%c",current_Node->ch);
-                                current_Node = huff_tree;
-                            }
-                    }
-                    currentByte = nextByte;
-                }
-
-                 for(bit = 7;bit >= (signed int)trash_size ;bit--){
-
-                    if(is_bit_set(currentByte,bit)){
-                                if(current_Node->right != NULL)
-                                    current_Node = current_Node->right;
-                            }
-                            else
-                                if(current_Node->left != NULL)
-                                    current_Node = current_Node->left;
-                            if(current_Node->isLeaf == 1){
-                                //printf("\nLeaf : %c",current_Node->ch);
-                                fprintf(outputFile,"%c",current_Node->ch);
-                                current_Node = huff_tree;
-                            }
-                 }
-
-}
-
-
-
-/**< apsokdopaskdopasokpdopsadsda */
 int main(){
     printf("Huffman Decode!\n");
-    char texto[100];
-    scanf ("%s",texto);
-    FILE * arquivo = fopen(texto,"rb");
+    char path[100];
+    scanf ("%s",path);
+    FILE * arquivo = fopen(path,"rb");
     printf("\n1 -- Comprimir\n2 -- Descomprimir\n");
-    int pick = 2;
+    int pick;
+
     scanf("%d",&pick);
-     int i;
-            int vetor[256];
+
     switch(pick){
         case 2:
             descomprimir(arquivo);
             break;
         case 1:
-
-
-            for(i=0;i<256;i++){
-                vetor[i]=0;
-            }
-            unsigned int ch;
-            while((ch = getc(arquivo))!=EOF){
-                vetor[ch]++;
-            }
-        //    printf ("quantidade:%d",a);
-            fclose(arquivo);
-            /*
-            for(i=0;i<256;i++){
-                printf ("%d %d\n",i,vetor[i]);
-            }*/
-            //qsort(vetor,256,sizeof(Contar),cmpfunc);
-            Priority_Queue * pq = create_priority_queue(); // fazer priority queue de nodes
-            Tree * tree = create_tree();
-            for(i=0;i<256;i++){
-                if(vetor[i] !=0){
-                    Tree_Node * a = create_tree_node();
-                    a->priority = vetor[i];
-                    a->isLeaf=1;
-                    a->ch = i; //sprintf(a->ch,"%c",i);
-                    pq = enqueue_pq(pq,a);
-                    //tree->size++;
-                }//printf ("char:%c freq:%d\n",vetor[i].ch,vetor[i].frequency);
-            }
-            //
-            while(size_pq(pq)>1){
-                Tree_Node * x1 = dequeue_pq(pq);
-                Tree_Node * x2 = dequeue_pq(pq);
-                Tree_Node * p = create_tree_node();
-                p->priority = x1->priority + x2->priority;
-                p->right = x2;
-                p->left = x1;
-                p->isLeaf=0;
-                p->ch='*';//sprintf(p->ch,"*");
-                pq = enqueue_pq(pq,p);
-
-                //tree->size++;
-            }
-
-            tree->root = dequeue_pq(pq);
-            size_tree(tree->root,&tree->size);
-            //print_preorder_tree(tree->root);
-
-            char hash[256][40];
-            char binary [40];
-            binary[0]='\0';
-            create_hash(tree->root,hash,binary);
-
-           /* for(i=0;i<256;i++){
-                printf ("%c(%d): %s\n",i,i,hash[i]);
-            }*/
-
-
-            printf ("size:%d\n",tree->size);
-            int bits_size=0;
-            for(i=0;i<256;i++){
-                bits_size += strlen(hash[i]) * vetor[i];
-            }
-            printf ("size bits:%d\n",bits_size);
-            int garbage = 8 - bits_size%8;
-             if (garbage==8)
-                garbage=0;
-            printf ("lixo:%d\n",garbage);
-
-
-            char lixo[3];
-            char tamanho[13];
-            itoa(garbage,lixo,2);
-            itoa(tree->size,tamanho,2);
-
-            char first[16];
-            first[0]='\0';
-            int aux1 = 3-strlen(lixo);
-
-            if(aux1==1)
-                sprintf(first,"0");
-            if(aux1==2)
-                sprintf(first,"00");
-
-            strcat(first,lixo);
-            int aux = 13-strlen(tamanho);
-            while(aux-- != 0)
-                strcat(first,"0");
-            strcat (first,tamanho);
-
-            printf ("first:%s\n",first);
-
-            FILE *output_file;
-            arquivo = fopen(texto,"rb");
-            output_file = fopen("compressed.huff", "wb+");
-            print_preorder_tree(tree->root);
-            printf_first_bits_in_file(first,output_file);
-            print_preorder_tree_in_file(tree->root,output_file);
-            print_content_in_file(hash,arquivo,output_file);
-            fclose(arquivo);
-            fclose(output_file);
-
-
-            return 0;
+            comprimir(arquivo,path);
             break;
     }
     return 0;
