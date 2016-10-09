@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1475966191 source:e:\ufal\p2\projeto-p2\huffman\main.c
+1476054990 source:e:\ufal\p2\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -18,7 +18,7 @@
 	<stdlib.h>
 	<string.h>
 
-1475966229 source:e:\ufal\p2\projeto-p2\huffman\tree.c
+1476054119 source:e:\ufal\p2\projeto-p2\huffman\tree.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -29,7 +29,7 @@
 	<stdlib.h>
 	"Tree.h"
 
-1475963217 e:\ufal\p2\projeto-p2\huffman\tree.h
+1476054103 e:\ufal\p2\projeto-p2\huffman\tree.h
 	<stdio.h>
 	<stdlib.h>
 
@@ -59,13 +59,13 @@
 	<stdlib.h>
 	<string.h>
 
-1475963023 source:e:\ufal\p2\projeto-p2\huffman\hashfunctions.c
+1476055273 source:e:\ufal\p2\projeto-p2\huffman\hashfunctions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"Tree.h"
 
-1475962624 e:\ufal\p2\projeto-p2\huffman\hashfunctions.h
+1476054063 e:\ufal\p2\projeto-p2\huffman\hashfunctions.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

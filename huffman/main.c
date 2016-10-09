@@ -56,6 +56,8 @@ void descomprimir(FILE *input_file) {
             current_Node = huff_tree;
         }
     }
+
+    printf ("Descompressao completa!\nArquivo:descompressed\nTamanho do lixo:%d\nTamanho da arvore:%d\n",trash_size,size_tree(huff_tree));
 }
 
 void comprimir (FILE * arquivo,char * path){
@@ -100,13 +102,15 @@ void comprimir (FILE * arquivo,char * path){
     tree->root = dequeue_pq(pq);/*A árvore será o nó restante da PQ.*/
     tree->size = size_tree(tree->root); /*Percorre toda a árvore e conta os nós.*/
 
-    char hash[256][40]; /* Cria um 'hashmap' que vai armazenar a nova representação de bits de cada caracter do texto. 256 porque é quantos caracteres existem, e 40 porque é o tamanho 'máximo' da representação.*/
-    char binary [40]; /* String auxiliar para usar no preenchimento da hashh.*/
+    char * hash[256]; /* Cria um 'hashmap' que vai armazenar a nova representação de bits de cada caracter do texto. 256 porque é quantos caracteres existem, e 40 porque é o tamanho 'máximo' da representação.*/
+    for(i=0;i<256;i++){
+        hash[i]=NULL;
+    }
+    char binary [256]; /* String auxiliar para usar no preenchimento da hashh.*/
     binary[0]='\0'; /*Zerando a String auxiliar.*/
     create_hash(tree->root,hash,binary); /*Função para preencher a hash recursivamente.*/
-
     int bits_size=0; /*Variável para saber quantos bits o novo texto terá.*/
-    for(i=0;i<256;i++){
+    for(i=0;i<256 && hash[i]!=NULL;i++){
         bits_size += strlen(hash[i]) * vetor[i]; /*Multiplica a quantidade de bits da nova representação pela quantidade de vez que o caracter aparece no texto, e soma para a quantidade total de bits.*/
     }
 
@@ -151,8 +155,8 @@ void comprimir (FILE * arquivo,char * path){
 
 int main(){
     printf("Huffman Decode!\n");
-    char path[100];
-    scanf ("%s",path);
+    char path[1000];
+    gets(path);
     FILE * arquivo = fopen(path,"rb");
     printf("\n1 -- Comprimir\n2 -- Descomprimir\n");
     int pick;
