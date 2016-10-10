@@ -63,7 +63,6 @@ void descomprimir(FILE *input_file) {
 void comprimir (FILE * arquivo,char * path){
     int vetor[256]; /*Vetor para contar os caracteres.*/
     int i;
-
     for(i=0;i<256;i++){
         vetor[i]=0;
     }
@@ -73,7 +72,6 @@ void comprimir (FILE * arquivo,char * path){
         vetor[ch]++;
     }
     fclose(arquivo);
-
     Priority_Queue * pq = create_priority_queue();/*Cria a PQ de nós de árvore.*/
 
     for(i=0;i<256;i++){ /*For para inserir todos os caracteres na arvore.*/
@@ -85,7 +83,6 @@ void comprimir (FILE * arquivo,char * path){
             pq = enqueue_pq(pq,a); /*Insere o nó na PQ*/
         }
     }
-
     while(size_pq(pq)>1){ /*Faz um loop que junta todos os nós, até sobrar somente um nó (nó raiz).*/
         Tree_Node * x1 = dequeue_pq(pq); /* Pega o nó com menor prioriodade da árvore.*/
         Tree_Node * x2 = dequeue_pq(pq);/* Pega o nó com menor prioriodade da árvore.*/
@@ -97,7 +94,6 @@ void comprimir (FILE * arquivo,char * path){
         p->ch='*'; /*Seto '*' para o nó.*/
         pq = enqueue_pq(pq,p); /*Insiro este novo nó na PQ.*/
     }
-
     Tree * tree = create_tree();/*Cria a árvore.*/
     tree->root = dequeue_pq(pq);/*A árvore será o nó restante da PQ.*/
     tree->size = size_tree(tree->root); /*Percorre toda a árvore e conta os nós.*/
@@ -121,7 +117,6 @@ void comprimir (FILE * arquivo,char * path){
 
     char lixo[3]; /*String para o tamanho do lixo em bits.*/
     char tamanho[13];/*String para o tamanho da árvore em bits.*/
-
     itoa(garbage,lixo,2); /*Escreve na string o tamanho do lixo em binário.*/
     itoa(tree->size,tamanho,2); /*Escreve na string o tamanho da árvore em binário.*/
 
@@ -131,9 +126,8 @@ void comprimir (FILE * arquivo,char * path){
     int aux1 = 3-strlen(lixo); /* Verifica com quantos bits ele escreveu o lixo. */
     while(aux1-- != 0) /* Completar com '0' a quantidade de bits que faltar.*/
         strcat(first,"0");
-
     strcat(first,lixo); /*Escrever os bits do lixo na string dos 16 primeiros bits.*/
-
+    
     int aux = 13-strlen(tamanho); /* Verifica com quantos bits ele escreveu o tamanho da árvore. */
     while(aux-- != 0) /* Completar com '0' a quantidade de bits que faltar.*/
         strcat(first,"0");
@@ -142,7 +136,6 @@ void comprimir (FILE * arquivo,char * path){
 
     FILE *output_file = fopen("compressed.huff", "wb+");  /*Cria o arquivo de saída da compressão.*/
     arquivo = fopen(path,"rb"); /*Abre novamente o arquivo que será comprimido.*/
-
     printf_first_bits_in_file(first,output_file);/*Transforma os 16 primeiros bits em 2 bytes, e imprime no arquivo de saída.*/
     print_preorder_tree_in_file(tree->root,output_file); /*Imprime a árvore em pré-ordem no arquivo de saída.*/
     print_content_in_file(hash,arquivo,output_file); /*Imprime o texto comprimido.*/
@@ -160,9 +153,8 @@ int main(){
     FILE * arquivo = fopen(path,"rb");
     printf("\n1 -- Comprimir\n2 -- Descomprimir\n");
     int pick;
-
     scanf("%d",&pick);
-
+    printf ("%s\n%d\n",path,pick);
     switch(pick){
         case 2:
             descomprimir(arquivo);
