@@ -7,7 +7,7 @@
 	"priority_queue_heap.h"
 	"generate.h"
 
-1475636567 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue.c
+1475809180 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue.c
 	<stdio.h>
 	<stdlib.h>
 	"priority_queue.h"
@@ -16,7 +16,7 @@
 
 1474153102 c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.h
 
-1475636567 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.c
+1475638417 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\fila\priority_queue_heap.c
 	<stdio.h>
 	<stdlib.h>
 	"priority_queue_heap.h"

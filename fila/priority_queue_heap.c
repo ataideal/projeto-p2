@@ -97,7 +97,7 @@ void enqueue_heap (Heap *heap, int priority, int value)
                 fclose(aux);
 
             heap->maxSize+=100;
-            heap->compara=0;
+            //heap->compara=0;
         }
 
 

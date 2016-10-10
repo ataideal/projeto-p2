@@ -89,6 +89,8 @@ void printf_first_bits_in_file(char first[16],FILE * file){/* Imprime os 2 prime
 int size_tree(Tree_Node* tree){ /*Conta o tamanho de nós da árvore.*/
 	if(tree==NULL)
         return 0;
+    if((tree->ch=='*' || tree->ch=='\\') && isLeaf(tree))
+        return 2 + size_tree(tree->left) + size_tree(tree->right);
     return 1 + size_tree(tree->left) + size_tree(tree->right);
 }
 
@@ -129,7 +131,7 @@ unsigned int *get_tree_array(FILE *input_file, unsigned int * tree_size) { /*Lê 
 
 	/* cria um array com o tamanho da árvore recebido */
 	unsigned int *tree_array;
-    tree_array = (unsigned int *)malloc(sizeof(unsigned int)*((*tree_size)+2)); /*Tamanho da arvore +2 porque pra representar os nós '\' e '*' precisamos de 1 caracter a mais pra cada.*/
+    tree_array = (unsigned int *)malloc(sizeof(unsigned int)*(*tree_size)); /*Tamanho da arvore +2 porque pra representar os nós '\' e '*' precisamos de 1 caracter a mais pra cada.*/
 	/* vai até o terceito byte do arquivo para receber os caracteres (o ter-
 	 * ceiro byte é o primeiro byte da árvore) */
 	fseek(input_file, 2, 0);
@@ -138,7 +140,6 @@ unsigned int *get_tree_array(FILE *input_file, unsigned int * tree_size) { /*Lê 
 	for (i = 0; i < (*tree_size); i++) {
 	tree_array[i] = getc(input_file);
         if(tree_array[i] == '\\'){
-            (*tree_size)++;
             i++;
             tree_array[i] = getc(input_file);
         }

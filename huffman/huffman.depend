@@ -71,3 +71,44 @@
 	<string.h>
 	"Tree.h"
 
+1475967306 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\priorityqueue.c
+	<stdio.h>
+	<stdlib.h>
+	"Tree.h"
+	"PriorityQueue.h"
+
+1476056699 c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\tree.h
+	<stdio.h>
+	<stdlib.h>
+
+1474152370 c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\priorityqueue.h
+	<stdio.h>
+	<stdlib.h>
+	"Tree.h"
+
+1476068808 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\hashfunctions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+
+1476068808 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"PriorityQueue.h"
+	"Tree.h"
+	"HashFunctions.h"
+
+1476068808 c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\hashfunctions.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+
+1476103447 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\tree.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+

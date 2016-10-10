@@ -7,7 +7,15 @@
 
 int main()
 {
+   if( remove( "generate_output_heap.txt" ) != 0 )
+    perror( "Error deleting file" );
+   else
+    puts( "File successfully deleted" );
 
+   if( remove( "generate_output_pq.txt" ) != 0 )
+    perror( "Error deleting file" );
+   else
+    puts( "File successfully deleted" );
    priorityQueue *pq;
    pq = createPriorityQueue();
    Heap *newHeap = create_heap();
@@ -23,6 +31,7 @@ int main()
        enqueue_heap(newHeap,element,element);
    }
    printf ("Dados criados!\n");
+
 
 
     return 0;

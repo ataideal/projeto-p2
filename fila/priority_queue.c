@@ -68,7 +68,7 @@ priorityQueue *enqueue (priorityQueue *pq, int elemento, int p)
             fprintf(aux,"%d %d\n",pq->size,pq->compara);
             fclose(aux);
 
-            pq->compara=0;
+            //pq->compara=0;
             pq->maxSize+=100;
         }
 
