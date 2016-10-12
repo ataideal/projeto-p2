@@ -13,6 +13,43 @@ int get_bit_at_position(unsigned int character, int position) {
         retorna a operação AND entre o Binário do A '01000001' e '01000000'.
         retorna '01000000';	*/
 }
+int set_bit_at_position(unsigned int character, int position) {
+	unsigned int mask = 1 << position; /*Pega o binário de 1 "000000001" e desloca a esquerda N vezes.*/
+	return (mask | character);
+}
+
+unsigned int get_extension_length(char *filename)
+{
+    int i;
+    unsigned int tam;
+
+    unsigned char bit;
+    char *e = strrchr (filename, '.');
+
+    if (e == NULL)
+        e = "";
+    if(strlen(e)> 6){
+        printf("Extensão grande demais");
+    }
+    else{
+        e = e+1;
+        tam = strlen(e);
+
+
+
+    }
+
+
+    return tam;
+}
+
+unsigned int get_password_length(char *password)
+{
+        unsigned int tam = strlen(password);
+        return (unsigned int)(tam);
+}
+
+
 void descomprimir(FILE *input_file) {
     int trash_size = get_trash_size(input_file); /*Pega o tamanho do lixo.*/
     Tree_Node *huff_tree = get_tree(input_file); /*Cria lê a árvore do arquivo e a reconstrói.*/
@@ -127,7 +164,7 @@ void comprimir (FILE * arquivo,char * path){
     while(aux1-- != 0) /* Completar com '0' a quantidade de bits que faltar.*/
         strcat(first,"0");
     strcat(first,lixo); /*Escrever os bits do lixo na string dos 16 primeiros bits.*/
-    
+
     int aux = 13-strlen(tamanho); /* Verifica com quantos bits ele escreveu o tamanho da árvore. */
     while(aux-- != 0) /* Completar com '0' a quantidade de bits que faltar.*/
         strcat(first,"0");
@@ -151,10 +188,17 @@ int main(){
     char path[1000];
     gets(path);
     FILE * arquivo = fopen(path,"rb");
+    char senha[1000];
+    gets(senha);
+    unsigned char length = (unsigned char)(get_extension_length(path)+get_password_length(senha));
+    printf("%d", length);
     printf("\n1 -- Comprimir\n2 -- Descomprimir\n");
     int pick;
     scanf("%d",&pick);
     printf ("%s\n%d\n",path,pick);
+
+
+
     switch(pick){
         case 2:
             descomprimir(arquivo);

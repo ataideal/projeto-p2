@@ -38,6 +38,7 @@ void print_preorder_tree(Tree_Node * tree){/*Imprime a árvore em pré-ordem no co
         print_preorder_tree(tree->right);
     }
 }
+
 void print_preorder_tree_in_file(Tree_Node * tree, FILE *file){/*Imprime a árvore em pré-ordem no arquivo.*/
 
     if(tree!=NULL){
@@ -139,15 +140,12 @@ unsigned int *get_tree_array(FILE *input_file, unsigned int * tree_size) { /*Lê 
 	/* recebe os caracteres em sequencia tree_size vezes */
 	for (i = 0; i < (*tree_size); i++) {
 	tree_array[i] = getc(input_file);
-        if(tree_array[i] == '\\'){
-            i++;
-            tree_array[i] = getc(input_file);
-        }
     }
 
     for (i = 0; i < (*tree_size); i++) {
             printf("%c",tree_array[i]);
     }
+
 	return (tree_array); /* retorna o endereço para o array criado */
 }
 

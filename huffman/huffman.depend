@@ -33,31 +33,34 @@
 	<stdio.h>
 	<stdlib.h>
 
-1475733172 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
+1476307627 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"PriorityQueue.h"
 	"Tree.h"
+	"HashFunctions.h"
 
 1474135290 c:\users\casa\repositories\projeto-p2\huffman\priorityqueue.h
 	<stdio.h>
 	<stdlib.h>
 	"Tree.h"
 
-1475721046 c:\users\casa\repositories\projeto-p2\huffman\tree.h
+1476058566 c:\users\casa\repositories\projeto-p2\huffman\tree.h
 	<stdio.h>
 	<stdlib.h>
 
-1475455143 source:c:\users\casa\repositories\projeto-p2\huffman\priorityqueue.c
+1476058566 source:c:\users\casa\repositories\projeto-p2\huffman\priorityqueue.c
 	<stdio.h>
 	<stdlib.h>
 	"Tree.h"
+	"PriorityQueue.h"
 
-1475721046 source:c:\users\casa\repositories\projeto-p2\huffman\tree.c
+1476307437 source:c:\users\casa\repositories\projeto-p2\huffman\tree.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	"Tree.h"
 
 1476055273 source:e:\ufal\p2\projeto-p2\huffman\hashfunctions.c
 	<stdio.h>
@@ -107,6 +110,18 @@
 	"Tree.h"
 
 1476103447 source:c:\users\tiago\desktop\projeto de p2\projeto-p2\huffman\tree.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+
+1476305501 source:c:\users\casa\repositories\projeto-p2\huffman\hashfunctions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+
+1476305501 c:\users\casa\repositories\projeto-p2\huffman\hashfunctions.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
