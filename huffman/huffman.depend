@@ -33,13 +33,14 @@
 	<stdio.h>
 	<stdlib.h>
 
-1476307627 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
+1476589266 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"PriorityQueue.h"
 	"Tree.h"
 	"HashFunctions.h"
+	<openssl/md5.h>
 
 1474135290 c:\users\casa\repositories\projeto-p2\huffman\priorityqueue.h
 	<stdio.h>

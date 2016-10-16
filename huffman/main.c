@@ -49,7 +49,42 @@ unsigned int get_password_length(char *password)
         unsigned int tam = strlen(password);
         return (unsigned int)(tam);
 }
+unsigned char* get_filename(char *path, unsigned int tam_ext){
+    unsigned char *buffer;
+    int tam = strlen(path) - (tam_ext+1);
+    printf("%d", tam);
+    buffer = (unsigned char*) malloc(sizeof(unsigned char)*tam);
+    int c =0;
+     while (c < tam) {
+      buffer[c] = path[c];
+      c++;
+   }
+   buffer[c] = '\0';
 
+
+    return buffer;
+}
+
+unsigned char* createMd5(const char* password){
+     unsigned char digest[16];
+
+
+
+
+    MD5_CTX ctx;
+    MD5_Init(&ctx);
+    MD5_Update(&ctx, password, strlen(password));
+    MD5_Final(digest, &ctx);
+
+    char mdString[33];
+    int i;
+    for ( i = 0; i < 16; i++)
+        sprintf(&mdString[i*2], "%02x", (unsigned int)digest[i]);
+
+   return mdString;
+
+
+}
 
 void descomprimir(FILE *input_file) {
     int trash_size = get_trash_size(input_file); /*Pega o tamanho do lixo.*/
@@ -191,9 +226,12 @@ int main(){
     FILE * arquivo = fopen(path,"rb");
     char senha[1000];
     gets(senha);
+    unsigned char *md5 = createMd5(senha);
     char *ext = get_extension(path);
-    unsigned char length = (unsigned char)(get_extension_length(ext)+get_password_length(senha));
-    printf("%d", length);
+    unsigned int ext_length = get_extension_length(ext);
+    get_filename(path,ext_length);
+    unsigned char length = (unsigned char)(ext_length +get_password_length(senha));
+
     printf("\n1 -- Comprimir\n2 -- Descomprimir\n");
     int pick;
     scanf("%d",&pick);
