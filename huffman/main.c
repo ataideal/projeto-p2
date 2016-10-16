@@ -4,6 +4,8 @@
 #include "PriorityQueue.h"
 #include "Tree.h"
 #include "HashFunctions.h"
+#include <openssl/md5.h>
+
 
 int get_bit_at_position(unsigned int character, int position) {
 	unsigned int mask = 1 << position; /*Pega o binário de 1 "000000001" e desloca a esquerda N vezes.*/
@@ -17,14 +19,12 @@ int set_bit_at_position(unsigned int character, int position) {
 	unsigned int mask = 1 << position; /*Pega o binário de 1 "000000001" e desloca a esquerda N vezes.*/
 	return (mask | character);
 }
-
-unsigned int get_extension_length(char *filename)
-{
+char* get_extension(char *path){
     int i;
     unsigned int tam;
 
     unsigned char bit;
-    char *e = strrchr (filename, '.');
+    char *e = strrchr (path, '.');
 
     if (e == NULL)
         e = "";
@@ -33,13 +33,14 @@ unsigned int get_extension_length(char *filename)
     }
     else{
         e = e+1;
-        tam = strlen(e);
-
-
-
     }
+    return e;
+}
 
-
+unsigned int get_extension_length(char *ext)
+{
+    unsigned int tam;
+    tam = strlen(ext);
     return tam;
 }
 
@@ -190,7 +191,8 @@ int main(){
     FILE * arquivo = fopen(path,"rb");
     char senha[1000];
     gets(senha);
-    unsigned char length = (unsigned char)(get_extension_length(path)+get_password_length(senha));
+    char *ext = get_extension(path);
+    unsigned char length = (unsigned char)(get_extension_length(ext)+get_password_length(senha));
     printf("%d", length);
     printf("\n1 -- Comprimir\n2 -- Descomprimir\n");
     int pick;
