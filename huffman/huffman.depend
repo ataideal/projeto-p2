@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1476055767 source:e:\ufal\p2\projeto-p2\huffman\main.c
+1476718556 source:e:\ufal\p2\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"PriorityQueue.h"
 	"Tree.h"
 	"HashFunctions.h"
+	<openssl/md5.h>
 
 1475964842 source:e:\ufal\p2\projeto-p2\huffman\priorityqueue.c
 	<stdio.h>
@@ -18,7 +19,7 @@
 	<stdlib.h>
 	<string.h>
 
-1476054119 source:e:\ufal\p2\projeto-p2\huffman\tree.c
+1476665295 source:e:\ufal\p2\projeto-p2\huffman\tree.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -63,13 +64,13 @@
 	<string.h>
 	"Tree.h"
 
-1476055273 source:e:\ufal\p2\projeto-p2\huffman\hashfunctions.c
+1476060800 source:e:\ufal\p2\projeto-p2\huffman\hashfunctions.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"Tree.h"
 
-1476058479 e:\ufal\p2\projeto-p2\huffman\hashfunctions.h
+1476060342 e:\ufal\p2\projeto-p2\huffman\hashfunctions.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
