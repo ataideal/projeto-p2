@@ -34,7 +34,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1476589266 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
+1476763284 source:c:\users\casa\repositories\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -42,6 +42,7 @@
 	"Tree.h"
 	"HashFunctions.h"
 	<openssl/md5.h>
+	<dirent.h>
 
 1474135290 c:\users\casa\repositories\projeto-p2\huffman\priorityqueue.h
 	<stdio.h>

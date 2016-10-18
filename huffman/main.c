@@ -5,6 +5,9 @@
 #include "Tree.h"
 #include "HashFunctions.h"
 #include <openssl/md5.h>
+#include <dirent.h>
+#include<windows.h>
+
 
 
 int get_bit_at_position(unsigned int character, int position) {
@@ -23,17 +26,19 @@ char* get_extension(char *path){
     int i;
     unsigned int tam;
 
+
     unsigned char bit;
     char *e = strrchr (path, '.');
 
     if (e == NULL)
-        e = "";
+        e = ".";
     if(strlen(e)> 6){
         printf("Extensão grande demais");
     }
     else{
         e = e+1;
     }
+
     return e;
 }
 
@@ -142,6 +147,7 @@ unsigned int get_ext_length(FILE* input_file){
 }
 
 char * get_ext(FILE* input_file, int ext_length){
+
     char * ext = (char*)malloc(sizeof(char)*(ext_length+1));
 	int i;
 	for(i=0;i<ext_length;i++)
@@ -174,6 +180,128 @@ char * get_filename_file(FILE* input_file,int filename_length){
         filename[i] = getc(input_file);
     filename[i]='\0';
 	return filename;
+}
+FILE* create_dir(FILE* json){
+    char temp[10000];
+   memset(temp,0,strlen(temp));
+
+    char ch;
+
+    while((ch = getc(json)) != EOF){
+
+
+        if(ch == '{'){
+            int count = 0;
+             memset(temp,0,strlen(temp));
+             ch = getc(json);
+            while(ch != ',' && ch != '}'){
+
+                if(ch == '\\'){
+                    ch = getc(json);
+                }
+
+                temp[count] = ch;
+                count++;
+                 ch = getc(json);
+
+            }
+
+            CreateDirectory (temp, NULL);
+
+        }
+        else{
+
+             memset(temp,0,strlen(temp));
+            int count = 0;
+            if(ch == '}' || ch == ',')
+                ch = getc(json);
+            while(ch != ',' && ch != '}'){
+
+                if(ch == '\\'){
+                    ch = getc(json);
+                }
+
+                temp[count] = ch;
+                count++;
+                ch = getc(json);
+            }
+
+            FILE *temp_file = fopen(temp,"w+");
+
+            memset(temp,0,strlen(temp));
+
+            count = 0;
+            if(ch == '}')
+                ch = getc(json);
+
+            ch = getc(json);
+            while(ch != ',' && ch != '}'){
+                if(ch == '\\'){
+                    ch = getc(json);
+                }
+                temp[count] = ch;
+                count++;
+                ch = getc(json);
+            }
+             printf("%s",temp);
+            fprintf(temp_file,"%s",temp);
+            fclose(temp_file);
+         }
+    }
+}
+FILE* create_json(char *path,FILE *temp_json){
+    DIR *dir;
+    dir = opendir(path);
+
+    fprintf(temp_json,"{%s,", path);
+    struct dirent *dp,*aux;
+    aux = readdir (dir);
+
+    while((dp = aux) != NULL){
+
+        if ( !strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..") )
+        {
+            aux = readdir(dir);
+            continue;
+        } else if(get_extension_length(get_extension(dp->d_name)) == 0){
+            char temp_filename[1000];
+            strcpy(temp_filename,path);
+            strcat(temp_filename,"/");
+            strcat(temp_filename,dp->d_name);
+
+            create_json(temp_filename,temp_json);
+        }
+        else{
+            char ch;
+            char temp_filename[1000];
+            strcpy(temp_filename,path);
+             strcat(temp_filename,"/");
+            strcat(temp_filename,dp->d_name);
+
+            FILE *new_file = fopen(temp_filename,"rb");
+
+            fprintf(temp_json,"%s,",temp_filename);
+            while((ch = getc(new_file)) != EOF){
+
+               if(ch == ',' || ch == '\\'){
+                fprintf(temp_json,"\\");
+               }
+                fprintf(temp_json,"%c",ch);
+            }
+
+
+
+        }
+        aux = readdir(dir);
+        if(aux != NULL){
+            fprintf(temp_json,",");
+        }
+
+    }
+     fprintf(temp_json,"}");
+
+     closedir(dir);
+
 }
 
 void descompressao_completa(FILE *input_file,char * md5) {
@@ -460,10 +588,16 @@ int main(){
     printf("Huffman Decode!\n");
     char path[1000];
     gets(path);
+    remove("temp_json.txt")
+    FILE *temp_json;
+    temp_json = fopen("temp_json.txt","a");
+    create_json(path,temp_json);
+
     FILE * arquivo = fopen(path,"rb");
     char senha[100];
     gets(senha);
     unsigned char *md5 = createMd5(senha);
+
     char *ext = get_extension(path);
     unsigned int ext_length = get_extension_length(ext);
     unsigned char *filename = get_filename(path,ext_length);
@@ -473,7 +607,9 @@ int main(){
     int pick;
     scanf("%d",&pick);
 
+
     switch(pick){
+
         case 4:
             descompressao_tripla(arquivo,md5);
             break;
