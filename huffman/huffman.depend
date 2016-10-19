@@ -130,3 +130,110 @@
 	<string.h>
 	"Tree.h"
 
+1476844734 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\comp_descomp.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"PriorityQueue.h"
+	"Tree.h"
+	"HashFunctions.h"
+	<openssl/md5.h>
+	<dirent.h>
+	<windows.h>
+	<stdbool.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro5.h>
+	<allegro5/allegro_native_dialog.h>
+	<allegro5/allegro_memfile.h>
+	"interface_allegro5.h"
+
+1476833921 c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\priorityqueue.h
+	<stdio.h>
+	<stdlib.h>
+	"Tree.h"
+
+1476833921 c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\tree.h
+	<stdio.h>
+	<stdlib.h>
+
+1476833921 c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\hashfunctions.h
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+
+1476843738 c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\interface_allegro5.h
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro5.h>
+	<allegro5/allegro_native_dialog.h>
+	<allegro5/allegro_memfile.h>
+
+1476833921 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\hashfunctions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+
+1476843627 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\interface_allegro5.c
+	<stdio.h>
+	<stdlib.h>
+	<stdbool.h>
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro5.h>
+	<allegro5/allegro_native_dialog.h>
+	<allegro5/allegro_memfile.h>
+	"interface_allegro5.h"
+	"HashFunctions.h"
+	"PriorityQueue.h"
+	"Tree.h"
+
+1476833921 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\priorityqueue.c
+	<stdio.h>
+	<stdlib.h>
+	"Tree.h"
+	"PriorityQueue.h"
+
+1476833921 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\tree.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"Tree.h"
+
+1476845102 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"PriorityQueue.h"
+	"Tree.h"
+	"HashFunctions.h"
+	<openssl/md5.h>
+	<dirent.h>
+	<windows.h>
+	<stdbool.h>
+	"comp_descomp.h"
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	<allegro5/allegro5.h>
+	<allegro5/allegro_native_dialog.h>
+	<allegro5/allegro_memfile.h>
+
+1476838933 c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\comp_descomp.h
+
