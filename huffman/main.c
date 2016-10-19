@@ -19,8 +19,8 @@
 #include <allegro5/allegro_memfile.h>
 //#include "interface_allegro5.h"
 
-    const int LARGURA_TELA = 640; //Atributos da tela
-    const int ALTURA_TELA = 480;
+     const int LARGURA_TELA = 640; //Atributos da tela
+     const int ALTURA_TELA = 480;
 
     ALLEGRO_DISPLAY *janela = NULL;
     ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
@@ -132,8 +132,8 @@ void pegar_senha()
                 "Arquivo comprimido com sucesso!", NULL,
                 NULL, ALLEGRO_MESSAGEBOX_WARN);
                 //finalizar(); //Pode colocar essa opção de fechar o programa ou não, para tirar só colocar // antes
-                string[0]='\0';
-                senha[0]='\0';
+                //string[0]='\0';
+                //senha[0]='\0';
                 return ;
 
     }
@@ -144,8 +144,8 @@ void pegar_senha()
                 "Arquivo descomprimido com sucesso!\n",NULL,
                 NULL, ALLEGRO_MESSAGEBOX_WARN);
                 //finalizar();  //Pode colocar essa opção de fechar o programa ou não, para tirar só colocar // antes
-                string[0]='\0';
-                senha[0]='\0';
+                //string[0]='\0';
+                //senha[0]='\0';
                 return ;
     }
 
@@ -379,6 +379,7 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
        al_flip_display();
     //al_rest(5.0);
     }
+    printf ("%s\n",string);
     remove("temp_json.txt");
     FILE *temp_json;
     temp_json = fopen("temp_json.txt","a");
@@ -393,35 +394,36 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
 
 
     pegar_senha();
+    printf("%s\n",senha);
     unsigned char *md5 = createMd5(senha);
 
     char *ext = get_extension(string);
     unsigned int ext_length = get_extension_length(ext);
     unsigned char *filename = get_filename(string,ext_length);
     unsigned int filename_length = get_filename_length(string,ext_length);
-
+    printf("%s\n",string);
+    printf ("%s\n",senha);
 
 
     if(nivel==1 && operation==0)
     {
      comprimir(arquivo,string,"compressed.huff");
-     finalizar();
+
     }
     else if(nivel==3 && operation==0)
     {
      compressao_tripla(arquivo,string,md5,ext,ext_length,filename,filename_length);
-     finalizar();
+
     }
 
     else if(nivel==1 && operation==1)
     {
      descomprimir(arquivo,"descompressed");
-     finalizar();
+
     }
     else if(nivel==3 && operation==1)
     {
      descompressao_tripla(arquivo,md5);
-    finalizar();
     }
 
 
@@ -580,14 +582,25 @@ int main(){
     menu();
 
 
-   /* char path[1000];
+   /*char path[1000];
     gets(path);
+    remove("temp_json.txt");
+    FILE *temp_json;
+    temp_json = fopen("temp_json.txt","a");
+    create_json(path,temp_json);
 
+    FILE * arquivo = fopen(path,"rb");
     char senha[100];
-    gets(senha);*/
+    gets(senha);
+    unsigned char *md5 = createMd5(senha);
 
-
-   /* printf("\n1 -- Comprimir\n2 -- Descomprimir\n3 -- Compressao 3x\n4 -- Descompressao 3x\n");
+    char *ext = get_extension(path);
+    unsigned int ext_length = get_extension_length(ext);
+    unsigned char *filename = get_filename(path,ext_length);
+    unsigned int filename_length = get_filename_length(path,ext_length);
+    printf("%s\n",path);
+    printf("%s\n",senha);
+    printf("\n1 -- Comprimir\n2 -- Descomprimir\n3 -- Compressao 3x\n4 -- Descompressao 3x\n");
     int pick;
     scanf("%d",&pick);
 

@@ -14,8 +14,8 @@
 #include "PriorityQueue.h"
 #include "Tree.h"
 
-const int LARGURA_TELA = 640; //Atributos da tela
-const int ALTURA_TELA = 480;
+//const int LARGURA_TELA = 640; //Atributos da tela
+//const int ALTURA_TELA = 480;
 
 /*ALLEGRO_DISPLAY *janela = NULL;
     ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
