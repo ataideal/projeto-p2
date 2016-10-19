@@ -8,6 +8,7 @@ Tree_Node * create_tree_node(){/*Cria um novo nó de árvore vazio.*/
     a->left = NULL;
     a->right = NULL;
     a->priority = 0;
+    a->isLeaf=0;
     return a;
 }
 Tree_Node * create_tree_node_ch(unsigned int ch){ /*Cria um novo nó e seta o char.*/
@@ -15,6 +16,7 @@ Tree_Node * create_tree_node_ch(unsigned int ch){ /*Cria um novo nó e seta o cha
     a->ch = ch;
     a->left = NULL;
     a->right = NULL;
+    a->isLeaf=0;
     a->priority = 0;
     return a;
 }
@@ -59,8 +61,10 @@ void print_content_in_file(char * hash[256], FILE *arq,FILE *file){/*Transforma 
     char aux[8];/*Cria um auxiliar para armazenar os 8 bits que será transformado em caracter.*/
     aux[0]='\0';
     unsigned int caracter;
+    printf("\n");
     while((caracter = getc(arq))!=EOF){ /*Loop para ler todos os caracteres do arquivo.*/
         strcat(buffer,hash[(unsigned char)caracter]); /*Copia a hash do caracter lido para o buffer.*/
+        //printf ("%c",caracter);
         while(strlen(buffer)>=8){ /*Loop para enquanto o buffer for maior que 8, transformar em caracteres.*/
             strncat(aux,buffer,8);/*Copia os 8 primeiros bits do buffer pro auxiliar, que vai ser transformado em caracter codificado.*/
             char ch = (int)strtol(aux,NULL,2);/*Função strtol, recebe uma ponteiro pra string, um ponteiro pro ponteiro da string, e a base que a string está, e transforma para decimal.*/
@@ -69,10 +73,12 @@ void print_content_in_file(char * hash[256], FILE *arq,FILE *file){/*Transforma 
             sprintf(buffer,"%s",buffer+8);/*Empurra a string buffer 8 casas a esquerda.*/
         }
     }
+    printf ("last buffer:%s\n",buffer);
     if(strlen(buffer)>0){ /*Se o buffer for maior que 0, ainda existe o ultimo byte pra ser codificado.*/
         while(strlen(buffer)<8)/*Loop para preencher com 0 o final do buffer.*/
             strcat(buffer,"0");
         strncat(aux,buffer,8);
+        printf ("last byte:%s\n",aux);
         char ch = (int)strtol(aux,NULL,2);
         fprintf(file,"%c", ch);
     }

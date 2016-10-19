@@ -131,22 +131,19 @@ void pegar_senha()
                 al_show_native_message_box(NULL, "WinFAKE",
                 "Arquivo comprimido com sucesso!", NULL,
                 NULL, ALLEGRO_MESSAGEBOX_WARN);
-                //finalizar(); //Pode colocar essa opção de fechar o programa ou não, para tirar só colocar // antes
-                //string[0]='\0';
-                //senha[0]='\0';
                 return ;
 
     }
     else
     {
 
-        al_show_native_message_box(NULL, "WinFAKE",
+        /*al_show_native_message_box(NULL, "WinFAKE",
                 "Arquivo descomprimido com sucesso!\n",NULL,
                 NULL, ALLEGRO_MESSAGEBOX_WARN);
                 //finalizar();  //Pode colocar essa opção de fechar o programa ou não, para tirar só colocar // antes
                 //string[0]='\0';
                 //senha[0]='\0';
-                return ;
+                return ;*/
     }
 
 }
@@ -211,16 +208,13 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
     botao_exit = al_load_bitmap("Implementando Interface/imagens/sair.jpg");
 
     nivel1 = al_create_bitmap(100,50);
-    nivel2 = al_create_bitmap(100,50);
     nivel3 = al_create_bitmap(100,50);
 
     nivel1 = al_load_bitmap("Implementando Interface/imagens/nivel1.jpg");
-    nivel2 = al_load_bitmap("Implementando Interface/imagens/nivel2.jpg");
     nivel3 = al_load_bitmap("Implementando Interface/imagens/nivel3.jpg");
     menu_program = al_load_bitmap("Implementando Interface/imagens/menu.jpg");
 
     al_draw_bitmap(nivel1,100,150,0);
-    al_draw_bitmap(nivel2,250,150,0);
     al_draw_bitmap(nivel3,400,150,0);
     al_draw_bitmap(menu_program,250,420,0);
 
@@ -251,11 +245,7 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
                     nivel=1;
                     pegar_arquivo();
                 }
-                if(evento.mouse.x>=250 && evento.mouse.x<= 370 && evento.mouse.y <= 200 && evento.mouse.y >=150)
-                {
-                    printf ("ENTROU NO NIVEL 2!\n");
-                    pegar_arquivo();
-                }
+
                 if(evento.mouse.x>=400 && evento.mouse.x<= 520 && evento.mouse.y <= 200 && evento.mouse.y >=150)
                 {
                     printf ("ENTROU NO NIVEL 3!\n");
@@ -377,20 +367,8 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
 
        print_text();
        al_flip_display();
-    //al_rest(5.0);
+
     }
-    printf ("%s\n",string);
-    remove("temp_json.txt");
-    FILE *temp_json;
-    temp_json = fopen("temp_json.txt","a");
-    create_json(string,temp_json);
-
-    FILE * arquivo = fopen(string,"rb");
-    //char *ext = get_extension(string);
-
-    //create_json(string,temp_json);
-
-    //FILE * arquivo = fopen(string,"rb");
 
 
     pegar_senha();
@@ -399,31 +377,65 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
 
     char *ext = get_extension(string);
     unsigned int ext_length = get_extension_length(ext);
-    unsigned char *filename = get_filename(string,ext_length);
-    unsigned int filename_length = get_filename_length(string,ext_length);
     printf("%s\n",string);
     printf ("%s\n",senha);
-
+    bool flag;
+    flag = 0;
+    int k;
 
     if(nivel==1 && operation==0)
     {
-     comprimir(arquivo,string,"compressed.huff");
+        if(ext_length == 0){
+            flag = 1;
+        }
+        else
+            flag = 0;
+
+        compressao_completa(string,md5,flag,"compressed_1x.huff");
 
     }
     else if(nivel==3 && operation==0)
     {
-     compressao_tripla(arquivo,string,md5,ext,ext_length,filename,filename_length);
+         if(ext_length == 0){
+            flag = 1;
+        }
+        else
+            flag = 0;
+     compressao_tripla(string,md5,flag);
 
     }
 
     else if(nivel==1 && operation==1)
     {
-     descomprimir(arquivo,"descompressed");
-
+     k = descompressao_completa(string,(char*)md5);
+        if(k==0){
+             al_show_native_message_box(NULL, "WinFAKE",
+                    "Arquivo descomprimido com sucesso!\n",NULL,
+                    NULL, ALLEGRO_MESSAGEBOX_WARN);
+        finalizar();
+        }
+        if (k==-1){
+             al_show_native_message_box(NULL, "WinFAKE",
+                    "Senha Incorreta!\n",NULL,
+                    NULL, ALLEGRO_MESSAGEBOX_WARN);
+        k=2;
+        }
     }
     else if(nivel==3 && operation==1)
     {
-     descompressao_tripla(arquivo,md5);
+     k = descompressao_tripla(string,md5);
+         if(k==0){
+             al_show_native_message_box(NULL, "WinFAKE",
+                    "Arquivo descomprimido com sucesso!\n",NULL,
+                    NULL, ALLEGRO_MESSAGEBOX_WARN);
+        }
+        if (k==-1){
+             al_show_native_message_box(NULL, "WinFAKE",
+                    "Senha incorreta!\n",NULL,
+                    NULL, ALLEGRO_MESSAGEBOX_WARN);
+
+        k=2;
+        }
     }
 
 
@@ -443,12 +455,10 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
 
 
     nivel1 = al_load_bitmap("Implementando Interface/imagens/nivel1.jpg");
-    nivel2 = al_load_bitmap("Implementando Interface/imagens/nivel2.jpg");
     nivel3 = al_load_bitmap("Implementando Interface/imagens/nivel3.jpg");
     menu_program = al_load_bitmap("Implementando Interface/imagens/menu.jpg");
 
     al_draw_bitmap(nivel1,100,150,0);
-    al_draw_bitmap(nivel2,250,150,0);
     al_draw_bitmap(nivel3,400,150,0);
     al_draw_bitmap(menu_program,250,420,0);
 
@@ -477,11 +487,7 @@ void manipular_entrada_senha(ALLEGRO_EVENT evento)
                     nivel=1;
                     pegar_arquivo();
                 }
-                if(evento.mouse.x>=250 && evento.mouse.x<= 370 && evento.mouse.y <= 200 && evento.mouse.y >=150)
-                {
-                    printf ("ENTROU NO NIVEL 2!\n");
-                    pegar_arquivo();
-                }
+
                 if(evento.mouse.x>=400 && evento.mouse.x<= 520 && evento.mouse.y <= 200 && evento.mouse.y >=150)
                 {
                     printf ("ENTROU NO NIVEL 3!\n");
@@ -581,44 +587,5 @@ int main(){
 
     menu();
 
-
-   /*char path[1000];
-    gets(path);
-    remove("temp_json.txt");
-    FILE *temp_json;
-    temp_json = fopen("temp_json.txt","a");
-    create_json(path,temp_json);
-
-    FILE * arquivo = fopen(path,"rb");
-    char senha[100];
-    gets(senha);
-    unsigned char *md5 = createMd5(senha);
-
-    char *ext = get_extension(path);
-    unsigned int ext_length = get_extension_length(ext);
-    unsigned char *filename = get_filename(path,ext_length);
-    unsigned int filename_length = get_filename_length(path,ext_length);
-    printf("%s\n",path);
-    printf("%s\n",senha);
-    printf("\n1 -- Comprimir\n2 -- Descomprimir\n3 -- Compressao 3x\n4 -- Descompressao 3x\n");
-    int pick;
-    scanf("%d",&pick);
-
-
-    switch(pick){
-
-        case 4:
-            descompressao_tripla(arquivo,md5);
-            break;
-        case 3:
-            compressao_tripla(arquivo,path,md5,ext,ext_length,filename,filename_length);
-            break;
-        case 2:
-            descomprimir(arquivo,"descompressed");
-            break;
-        case 1:
-            comprimir(arquivo,path,"compressed.huff");
-            break;
-    }*/
     return 0;
 }

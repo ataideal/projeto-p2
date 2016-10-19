@@ -47,10 +47,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="comp_descomp.h" />
-		<Unit filename="interface_allegro5.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="interface_allegro5.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

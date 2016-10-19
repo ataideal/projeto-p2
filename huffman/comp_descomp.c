@@ -189,18 +189,17 @@ char * get_filename_file(FILE* input_file,int filename_length){
     filename[i]='\0';
 	return filename;
 }
-FILE* create_dir(FILE* json){
-    char temp[10000];
-   memset(temp,0,strlen(temp));
+void create_dir(FILE* json){
+   char temp[10000];
+   memset(temp,0,sizeof(temp));
 
-    char ch;
+    unsigned int ch;
 
     while((ch = getc(json)) != EOF){
 
-
         if(ch == '{'){
             int count = 0;
-             memset(temp,0,strlen(temp));
+             memset(temp,0,sizeof(temp));
              ch = getc(json);
             while(ch != ',' && ch != '}'){
 
@@ -213,13 +212,13 @@ FILE* create_dir(FILE* json){
                  ch = getc(json);
 
             }
-
+            //printf("temp:%s\n",temp);
             CreateDirectory (temp, NULL);
 
         }
         else{
 
-             memset(temp,0,strlen(temp));
+             memset(temp,0,sizeof(temp));
             int count = 0;
             if(ch == '}' || ch == ',')
                 ch = getc(json);
@@ -233,10 +232,10 @@ FILE* create_dir(FILE* json){
                 count++;
                 ch = getc(json);
             }
+            //printf("temp:%s\n",temp);
+            FILE *temp_file = fopen(temp,"wb+");
 
-            FILE *temp_file = fopen(temp,"w+");
-
-            memset(temp,0,strlen(temp));
+            memset(temp,0,sizeof(temp));
 
             count = 0;
             if(ch == '}')
@@ -247,17 +246,19 @@ FILE* create_dir(FILE* json){
                 if(ch == '\\'){
                     ch = getc(json);
                 }
-                temp[count] = ch;
+                //printf ("%c",ch);
+                fprintf(temp_file,"%c",ch);
                 count++;
                 ch = getc(json);
             }
-             printf("%s",temp);
-            fprintf(temp_file,"%s",temp);
+            //printf ("count:%d\n",count);
+             //printf("%s",temp);
+
             fclose(temp_file);
          }
     }
 }
-FILE* create_json(char *path,FILE *temp_json){
+void create_json(char *path,FILE *temp_json){
     DIR *dir;
     dir = opendir(path);
 
@@ -280,7 +281,7 @@ FILE* create_json(char *path,FILE *temp_json){
             create_json(temp_filename,temp_json);
         }
         else{
-            char ch;
+            unsigned int ch;
             char temp_filename[1000];
             strcpy(temp_filename,path);
              strcat(temp_filename,"/");
@@ -291,7 +292,7 @@ FILE* create_json(char *path,FILE *temp_json){
             fprintf(temp_json,"%s,",temp_filename);
             while((ch = getc(new_file)) != EOF){
 
-               if(ch == ',' || ch == '\\'){
+               if(ch == ',' || ch == '\\' || ch == '}'){
                 fprintf(temp_json,"\\");
                }
                 fprintf(temp_json,"%c",ch);
@@ -309,11 +310,10 @@ FILE* create_json(char *path,FILE *temp_json){
      fprintf(temp_json,"}");
 
      closedir(dir);
-
-    return temp_json;
 }
 
-void descompressao_completa(FILE *input_file,char * md5) {
+int descompressao_completa(char * path,char * md5) {
+    FILE* input_file = fopen(path,"rb");
     int trash_size = get_trash_size(input_file); /*Pega o tamanho do lixo.*/
     Tree_Node *huff_tree = get_tree(input_file); /*Cria lê a árvore do arquivo e a reconstrói.*/
     Tree_Node *current_Node = huff_tree; /*Cria um nó auxiliar pro início da árvore.*/
@@ -327,13 +327,16 @@ void descompressao_completa(FILE *input_file,char * md5) {
     printf ("\n\nEXT_LENGTH:%u\nEXT:%s\nFILENAME_LENGTH:%u\nFILENAME:%s\nMD5:%s\nPASS:%s\n\n",ext_length,ext,filename_length,filename,md5,pass);
     if (strcmp(md5,pass)!=0){
         printf ("Senha incorreta!\n");
-        return ;
+        return -1;
     }
-    FILE *outputFile = fopen(strcat(strcat(filename,"."),ext),"wb+");
+    char * nome_arquivo = strcat(strcat(filename,"."),ext);
+    FILE *outputFile = fopen(nome_arquivo,"wb+");
+    //printf ("NOME ARQUIVO:%s\n",nome_arquivo);
 
     unsigned int currentByte = getc(input_file);/*Variável pro char atual.*/
     unsigned int nextByte; /*Variável pro proximo char atual.*/
     int bit;/*Auxiliar pro for*/
+    //printf ("\n");
 
     while((nextByte=getc(input_file))!=EOF){/*Verifica se o proximo char não é o final do arquivo, e armazena ele.*/
         for(bit = 7;bit >= 0 ;bit--){ /*For começando do primeiro bit do 7 bit, contando da direita pra esquerda.*/
@@ -346,15 +349,18 @@ void descompressao_completa(FILE *input_file,char * md5) {
                     current_Node = current_Node->left;/*Atualiza o nó atual da árvore pra o nó a direita.*/
 
             if(current_Node->isLeaf == 1){/*Se o nó que chegamos for uma folha, escrevemos ele no arquivo.*/
+                //printf("%c",current_Node->ch);
                 fprintf(outputFile,"%c",current_Node->ch);
                 current_Node = huff_tree; /*Nó atual vai ser novamente o ínicio da árvore.*/
             }
         }
         currentByte = nextByte;/*Atualiza o byte atual do arquivo*/
     }
-
+    //printf ("\n");
     /* Ultimo byte do arquivo.*/
+    //printf ("last:%d\n",currentByte);
     for(bit = 7;bit >= (signed int)trash_size ;bit--){ /*Repete o processo acima, mas não considera os bits de lixo */
+        printf ("%d",bit);
         if(get_bit_at_position(currentByte,bit)){
             if(current_Node->right != NULL)
                 current_Node = current_Node->right;
@@ -364,13 +370,21 @@ void descompressao_completa(FILE *input_file,char * md5) {
                 current_Node = current_Node->left;
 
         if(current_Node->isLeaf == 1){
+            //printf("\n%c",current_Node->ch);
             fprintf(outputFile,"%c",current_Node->ch);
             current_Node = huff_tree;
         }
     }
     fclose(input_file);
     fclose(outputFile);
-    //printf ("Descompressao completa!\nArquivo:descompressed\nTamanho do lixo:%d\nTamanho da arvore:%d\n",trash_size,size_tree(huff_tree));
+    FILE * arq = fopen(nome_arquivo,"rb");
+    if(strcmp(ext,"wtf")==0){
+        //printf ("ext:%s\n",ext);
+        create_dir(arq);
+        fclose(arq);
+    }
+    printf ("Descompressao completa!\nArquivo:descompressed\nTamanho do lixo:%d\nTamanho da arvore:%d\n",trash_size,size_tree(huff_tree));
+    return 0;
 }
 
 void print_ext_length_in_file(FILE * output_file,unsigned int ext_length){
@@ -439,7 +453,7 @@ void comprimir (FILE * arquivo,char * path,char * output){
         bits_size += strlen(hash[i]) * vetor[i]; /*Multiplica a quantidade de bits da nova representação pela quantidade de vez que o caracter aparece no texto, e soma para a quantidade total de bits.*/
     }
 
-    int garbage = 8 - bits_size%8; /* Calcula o tamanho do lixo. Pega o resto da divisão do tamanho de bits total por 8, e subtrai de 8.*/
+    int garbage = 8 - (bits_size%8); /* Calcula o tamanho do lixo. Pega o resto da divisão do tamanho de bits total por 8, e subtrai de 8.*/
     if (garbage==8)/*Se o cálculo do lixo der 8, é porque não existe lixo.*/
         garbage=0;
 
@@ -468,14 +482,49 @@ void comprimir (FILE * arquivo,char * path,char * output){
     printf_first_bits_in_file(first,output_file);/*Transforma os 16 primeiros bits em 2 bytes, e imprime no arquivo de saída.*/
     print_preorder_tree_in_file(tree->root,output_file); /*Imprime a árvore em pré-ordem no arquivo de saída.*/
     print_content_in_file(hash,arquivo,output_file); /*Imprime o texto comprimido.*/
-
-    printf ("Compressao completa!\nArquivo:compressed.huff\nTamanho do lixo:%d\nTamanho da arvore:%d\n",garbage,tree->size);
-
     fclose(arquivo);
     fclose(output_file);
+    printf ("Compressao completa!\nArquivo:compressed.huff\nTamanho do lixo:%d\nTamanho da arvore:%d\n",garbage,tree->size);
+
+
 }
 
-void compressao_completa(FILE * arquivo,char * path,unsigned char * md5, char * ext,unsigned int ext_length,unsigned char * filename,unsigned int filename_length){
+void compressao_completa(char * path,unsigned char * md5, bool flag,char * saida){
+    FILE *arquivo;
+    if(flag == 1){
+        DIR *dir = opendir(path);
+        if( dir != NULL){
+        remove("temp_json.wtf");
+        FILE *temp_json;
+        temp_json = fopen("temp_json.wtf","wb+");
+        create_json(path,temp_json);
+        fclose(temp_json);
+        arquivo = fopen("temp_json.wtf","rb");
+        sprintf(path,"temp_json.wtf");
+        }
+        else{
+            arquivo = fopen(path,"rb");
+            }
+    }
+    else{
+        arquivo = fopen(path,"rb");
+        if( arquivo == NULL){
+        //DIR *dir = opendir(path);
+        remove("temp_json.wtf");
+        FILE *temp_json;
+        temp_json = fopen("temp_json.wtf","wb+");
+        create_json(path,temp_json);
+        fclose(temp_json);
+        arquivo = fopen("temp_json.wtf","rb");
+        sprintf(path,"temp_json.wtf");
+        }
+    }
+    printf("Path : %s\n",path);
+    char *ext = get_extension(path);
+    unsigned int ext_length = get_extension_length(ext);
+    unsigned char *filename = get_filename(path,ext_length);
+    unsigned int filename_length = get_filename_length(path,ext_length);
+    printf("EXT: %s \n EXT_LEN: %d \n FILENAME: %s \n, FILENAMNE_LEN: %d\n", ext,ext_length,filename,filename_length);
     int vetor[256]; /*Vetor para contar os caracteres.*/
     int i;
     for(i=0;i<256;i++){
@@ -521,11 +570,14 @@ void compressao_completa(FILE * arquivo,char * path,unsigned char * md5, char * 
     binary[0]='\0'; /*Zerando a String auxiliar.*/
     create_hash(tree->root,hash,binary); /*Função para preencher a hash recursivamente.*/
     int bits_size=0; /*Variável para saber quantos bits o novo texto terá.*/
-    for(i=0;i<256 && hash[i]!=NULL;i++){
+    for(i=0;i<256;i++){
+
+        if(hash[i]!=NULL)
         bits_size += strlen(hash[i]) * vetor[i]; /*Multiplica a quantidade de bits da nova representação pela quantidade de vez que o caracter aparece no texto, e soma para a quantidade total de bits.*/
     }
 
-    int garbage = 8 - bits_size%8; /* Calcula o tamanho do lixo. Pega o resto da divisão do tamanho de bits total por 8, e subtrai de 8.*/
+    int garbage = 8 - (bits_size%8); /* Calcula o tamanho do lixo. Pega o resto da divisão do tamanho de bits total por 8, e subtrai de 8.*/
+
     if (garbage==8)/*Se o cálculo do lixo der 8, é porque não existe lixo.*/
         garbage=0;
 
@@ -548,8 +600,7 @@ void compressao_completa(FILE * arquivo,char * path,unsigned char * md5, char * 
         strcat(first,"0");
 
     strcat (first,tamanho); /*Escrever os bits da árvore na string dos 16 primeiros bits.*/
-
-    FILE *output_file = fopen("temp_file", "wb+");  /*Cria o arquivo de saída da compressão.*/
+    FILE *output_file = fopen(saida, "wb+");  /*Cria o arquivo de saída da compressão.*/
     arquivo = fopen(path,"rb"); /*Abre novamente o arquivo que será comprimido.*/
     printf_first_bits_in_file(first,output_file);/*Transforma os 16 primeiros bits em 2 bytes, e imprime no arquivo de saída.*/
     print_preorder_tree_in_file(tree->root,output_file); /*Imprime a árvore em pré-ordem no arquivo de saída.*/
@@ -559,36 +610,37 @@ void compressao_completa(FILE * arquivo,char * path,unsigned char * md5, char * 
     print_name_length_in_file(output_file,filename_length);
     print_name_in_file(output_file,filename);
     print_content_in_file(hash,arquivo,output_file); /*Imprime o texto comprimido.*/
-
-    //printf ("Compressao completa!\nArquivo:compressed.huff\nTamanho do lixo:%d\nTamanho da arvore:%d\n",garbage,tree->size);
-
     fclose(arquivo);
     fclose(output_file);
+    printf ("Compressao completa!\nArquivo:compressed.huff\nTamanho do lixo:%d\nTamanho da arvore:%d\n",garbage,tree->size);
+
+
 
 }
 
-void compressao_tripla (FILE * arquivo,char * path,unsigned char * md5, char * ext,unsigned int ext_length,unsigned char * filename,unsigned int filename_length){
-    compressao_completa(arquivo,path,md5,ext,ext_length,filename,filename_length);
+void compressao_tripla (char * path,unsigned char * md5,bool flag){
+    compressao_completa(path,md5,flag,"temp_file");
     printf ("Compressao-1\n");
-    arquivo = fopen("temp_file", "rb");
+    FILE * arquivo = fopen("temp_file", "rb");
     comprimir(arquivo,"temp_file","temp_file_1");
-    //remove("temp_file");
+    remove("temp_file");
     printf ("Compressao-2\n");
     arquivo = fopen("temp_file_1", "rb");
     comprimir(arquivo,"temp_file_1","compressed_3x.huff");
-    //remove("temp_file_1");
+    remove("temp_file_1");
     printf ("Compressao-3\n");
 }
 
-void descompressao_tripla(FILE * input_file, unsigned char * md5){
+int descompressao_tripla(char * path, unsigned char * md5){
+    FILE * input_file = fopen(path,"rb");
     descomprimir(input_file,"temp_1");
     printf ("Descompressao-1\n");
     input_file = fopen("temp_1","rb");
     descomprimir(input_file,"temp_2");
     printf ("Descompressao-2\n");
     remove("temp_1");
-    input_file = fopen("temp_2","rb");
-    descompressao_completa(input_file,(char*)md5);
+    int flag = descompressao_completa("temp_2",(char*)md5);
     printf ("Descompressao-3\n");
     remove("temp_2");
+    return flag;
 }

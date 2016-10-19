@@ -130,7 +130,7 @@
 	<string.h>
 	"Tree.h"
 
-1476844734 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\comp_descomp.c
+1476898534 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\comp_descomp.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -208,13 +208,13 @@
 	"Tree.h"
 	"PriorityQueue.h"
 
-1476833921 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\tree.c
+1476897573 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\tree.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	"Tree.h"
 
-1476845102 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\main.c
+1476899736 source:c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -235,5 +235,5 @@
 	<allegro5/allegro_native_dialog.h>
 	<allegro5/allegro_memfile.h>
 
-1476838933 c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\comp_descomp.h
+1476898973 c:\users\tiago\desktop\projeto de p2\reav\projeto-p2\huffman\comp_descomp.h
 
